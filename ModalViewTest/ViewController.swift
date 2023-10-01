@@ -9,8 +9,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    
-    
+    var modaltransitionDelegate = ModalPresentationDelegate()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -29,8 +29,8 @@ class ViewController: UIViewController {
     }
 
     @objc func presentModal() {
-        let presentedVC = PresentedViewController(isHeightInteractive: true)
-        presentedVC.transitioningDelegate = ModalPresentationDelegate.init(presentationController: PresentationController(presentedViewController: presentedVC, presenting: self, configuration: <#T##PresentationConfiguration#>), dismissalAnimator: ModalTransitionAnimator, presentationAnimator: <#T##ModalTransitionAnimator#>)
-        present(presentedVC, animated: true, completion: nil)
+        var presentedVC = PresentedViewController(isHeightInteractive: true)
+        presentedVC.modalPresentationStyle = .popover
+        present(presentedVC, animated: true)
     }
 }

@@ -24,6 +24,8 @@ open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
     
     public var configuration: ModalAnimatorConfiguration
     
+    private lazy var shouldAnimateHeight = configuration.direction == .bottom || configuration.direction == .top
+    
     private var feedbackGenerator: UISelectionFeedbackGenerator?
     
     init(configuration: ModalAnimatorConfiguration) {
@@ -49,7 +51,11 @@ open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
                        initialSpringVelocity: 0,
                        options: .allowAnimatedContent,
                        animations: {
-            transitionContext.containerView.frame.origin.y = presentedFrame.height
+            if self.shouldAnimateHeight {
+                presentedVC.view.frame.origin.y = self.configuration.direction == .bottom ? presentedFrame.maxY : -presentedFrame.height
+            } else {
+                presentedVC.view.frame.origin.x = self.configuration.direction == .left ? 0.0 : presentedFrame.maxX
+            }
         },completion: { finished in
             presentedVC.removeFromParent()
             transitionContext.completeTransition(finished)
@@ -60,10 +66,10 @@ open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
         
         guard let presentedVC = transitionContext.viewController(forKey: .to) else { return }
         let presentedFrame = transitionContext.finalFrame(for: presentedVC)
-        
         let containerBounds = transitionContext.containerView.bounds
-        
+            
         var initialFrame = presentedFrame
+        
         switch configuration.direction {
         case .bottom:
             initialFrame.origin = .init(x: containerBounds.minX, y: containerBounds.maxY)
@@ -76,6 +82,8 @@ open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
         }
         presentedVC.view.frame = initialFrame
         
+        transitionContext.containerView.addSubview(presentedVC.view)
+        
         if configuration.hasHapticFeedback { feedbackGenerator?.selectionChanged() }
         
         UIView.animate(withDuration: configuration.transitionDuration,
@@ -84,7 +92,12 @@ open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
                        initialSpringVelocity: 0,
                        options: .allowAnimatedContent,
                        animations: {
-            presentedVC.view.frame.origin.y = presentedFrame.height
+            
+            if self.shouldAnimateHeight {
+                presentedVC.view.frame.origin.y = presentedFrame.minY
+            } else {
+                presentedVC.view.frame.origin.x = presentedFrame.minX
+            }
         },completion: { [weak self] finished in
             transitionContext.completeTransition(finished)
             self?.feedbackGenerator = nil
@@ -101,11 +114,10 @@ open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
         switch configuration.style {
         case .dismissal:
             animateDismissal(transitionContext: transitionContext)
-            
         case .presentation:
             animatePresentation(transitionContext: transitionContext)
         }
-    }
+    } 
 }
 
 public struct ModalAnimatorConfiguration {

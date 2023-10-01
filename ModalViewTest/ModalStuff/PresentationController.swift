@@ -12,15 +12,18 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
     
     private var configuration: PresentationConfiguration
     
-    private var dimmingView: DimmedView!
+    private lazy var dimmingView: DimmedView = DimmedView(state: .percent(0.1))
     
     private var presentable: PresentableViewController? {
         return presentedViewController as? PresentableViewController
     }
     
-    open override var frameOfPresentedViewInContainerView: CGRect { // works fine
+    open override var frameOfPresentedViewInContainerView: CGRect {
         
         let containerViewBounds = containerView?.bounds ?? CGRect.zero
+        
+        setupDimmedView()
+        gestureSetup()
         
         var size: CGSize = .zero
         
@@ -77,7 +80,7 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
         
         if let coordinator = presentedViewController.transitionCoordinator {
             coordinator.animate(alongsideTransition: { [weak self] context in
-                self?.dimmingView.state = .transparent
+                self?.dimmingView.state = .percent(0.5)
             })
         } else {
             dimmingView.state = .transparent
@@ -91,13 +94,12 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
          configuration: PresentationConfiguration) {
         self.configuration = configuration
         super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
-        setupDimmedView()
     }
-    
     
     func transitionToSize(_ size: PresentationDetent) {
         
         configuration.sizeMode = size
+        // TODO: work on gesture
         containerView?.setNeedsLayout()
     }
     
@@ -105,14 +107,11 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
         
         guard let containerView = containerView else { return }
         
-        dimmingView = DimmedView(state: configuration.dimmingState)
-        
         dimmingView.dismissPresenting = { [weak self] _ in
             self?.presentedViewController.dismiss(animated: true, completion: nil)
         }
         
         dimmingView.translatesAutoresizingMaskIntoConstraints = false
-        
         containerView.addSubview(dimmingView)
         dimmingView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
         dimmingView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
@@ -121,10 +120,10 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
     }
     
     func gestureSetup() {
-        
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
         panGestureRecognizer.delegate = self
-        containerView?.addGestureRecognizer(panGestureRecognizer)
+        presentable?.view.isUserInteractionEnabled = true
+        presentable?.view.addGestureRecognizer(panGestureRecognizer)
     }
     
     @objc func handlePanGesture(_ recognizer: UIPanGestureRecognizer){
@@ -138,7 +137,7 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
             case .began, .changed:
                 
                 if panTranslation.y < -(presentable?.shortHeight ?? 300)    {
-                    transitionToSize(.compact)
+                    transitionToSize(.long)
                 } else if panTranslation.y >= heightDiff {
                     transitionToSize(.short)
                 }
@@ -149,7 +148,7 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
         }
     }
     
-    // to avoid infrence of other gestures with pan
+    // to avoid infrence of other gestures with pan ..
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer is UIPanGestureRecognizer || otherGestureRecognizer is UIPanGestureRecognizer {
             return false

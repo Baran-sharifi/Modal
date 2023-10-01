@@ -17,15 +17,8 @@ class DimmedView: UIView {
     }
     
     public var state: AlphaState = .transparent {
-        didSet {
-            switch state {
-            case .transparent:
-                alpha = 0
-            case .percent(let value):
-                alpha = value
-            case .maxShadow:
-                alpha = 1
-            }
+        didSet{
+            applyTransparency(state)
         }
     }
     
@@ -39,8 +32,22 @@ class DimmedView: UIView {
     init(state: AlphaState) {
         
         super.init(frame: .zero)
+        backgroundColor = .gray
         self.state = state
-        self.addGestureRecognizer(tapGesture)
+        applyTransparency(state)
+        addGestureRecognizer(tapGesture)
+    }
+    
+    func applyTransparency(_ state: AlphaState) {
+        switch state {
+        case .transparent:
+            alpha = 0
+        case .percent(let value):
+            alpha = value
+            print(alpha)
+        case .maxShadow:
+            alpha = 1
+        }
     }
     
     required public init?(coder aDecoder: NSCoder) {

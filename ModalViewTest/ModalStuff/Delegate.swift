@@ -10,32 +10,21 @@ import UIKit
 
 class ModalPresentationDelegate: NSObject, UIViewControllerTransitioningDelegate {
     
+    //     var presentationController: PresentationController
+    //    
+    //     var dismissalAnimator: ModalTransitionAnimator
+    //
+    //     var presentationAnimator: ModalTransitionAnimator
     
-     var presentationController: PresentationController
-    
-     var dismissalAnimator: ModalTransitionAnimator
-    
-    var presentationAnimator: ModalTransitionAnimator
-    
-        
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        
-        dismissalAnimator
-    }
-
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        
-        presentationAnimator
-    }
-
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-
-       presentationController
+        return ModalTransitionAnimator(configuration: .init(style: .dismissal, direction: .bottom, transitionDuration: 2, hasHapticFeedback: true))
     }
     
-    init(presentationController: PresentationController, dismissalAnimator: ModalTransitionAnimator, presentationAnimator: ModalTransitionAnimator) {
-        self.presentationController = presentationController
-        self.dismissalAnimator = dismissalAnimator
-        self.presentationAnimator = presentationAnimator
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return ModalTransitionAnimator(configuration: .init(style: .presentation, direction: .bottom, transitionDuration: 2, hasHapticFeedback: true))
+    }
+    
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return PresentationController.init(presentedViewController: presented, presenting: presenting, configuration: .init(isInteractiveSizeSupported: true, direction: .bottom, sizeMode: .short))
     }
 }

@@ -15,41 +15,55 @@ import UIKit
     var shortHeight: CGFloat { get }
     var longHeight: CGFloat { get }
     
-   @objc optional var fractionalHeightToScreen: CGFloat { get set }
+    @objc optional var fractionalHeightToScreen: CGFloat { get set }
 }
 
-    open class PresentableViewController: UIViewController, PresentableViewControllerProtocol {
-                
-        var isHeightInteractive: Bool = true
+open class PresentableViewController: UIViewController, PresentableViewControllerProtocol {
+    
+    var isHeightInteractive: Bool = true
+    
+    var shortHeight: CGFloat {
+        return isHeightInteractive ?  400.0 : longHeight
+    }
+    
+    var longHeight: CGFloat {
         
-        var shortHeight: CGFloat {
-            return isHeightInteractive ?  400.0 : longHeight
-        }
+        return scrollViewMaxHeight ?? view.safeAreaLayoutGuide.layoutFrame.height
+    }
+    
+    var compactHeight: CGFloat?
+    
+    var scrollViewMaxHeight: CGFloat?
+    
+    var scrollView: UIScrollView = UIScrollView()
+    
+    init(isHeightInteractive: Bool) {
+        self.isHeightInteractive = isHeightInteractive
         
-        var longHeight: CGFloat {
-            
-            return scrollViewMaxHeight ?? view.safeAreaLayoutGuide.layoutFrame.height
-        }
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required public init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    open override func viewDidLayoutSubviews() {
         
-        var compactHeight: CGFloat?
+        let screenUsableHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
+        scrollViewMaxHeight = min(screenUsableHeight, scrollView.contentSize.height)
+    }
+}
+
+struct Modal {
+    
+    func bottomsheet(presented: PresentableViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerTransitioningDelegate {
         
-        var scrollViewMaxHeight: CGFloat?
+        let presentationController = PresentationController(presentedViewController: presented, presenting: presenting, configuration: .init(direction: .bottom, sizeMode: .short))
         
-        var scrollView: UIScrollView = UIScrollView()
+        let dismissalAnimator = ModalTransitionAnimator.init(configuration: .init(style: .dismissal, direction: .left, transitionDuration: 3, hasHapticFeedback: true))
         
-        init(isHeightInteractive: Bool) {
-            self.isHeightInteractive = isHeightInteractive
-            
-            super.init(nibName: nil, bundle: nil)
-        }
+        let presentationAnimator = ModalTransitionAnimator.init(configuration: .init(style: .presentation, direction: .left, transitionDuration: 3, hasHapticFeedback: true))
         
-        required public init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-        
-        open override func viewDidLayoutSubviews() {
-            
-            let screenUsableHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
-            scrollViewMaxHeight = min(screenUsableHeight, scrollView.contentSize.height)
-        }
+        return ModalPresentationDelegate()
+    }
 }

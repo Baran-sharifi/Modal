@@ -17,7 +17,7 @@ struct PresentationConfiguration {
     var direction: PresentingDirection
     var sizeMode: PresentationDetent
     
-    init(isBackViewInteractable: Bool = false, isInteractiveSizeSupported: Bool = false, dimmingState: DimmedView.AlphaState = .percent(0.5), direction: PresentingDirection, sizeMode: PresentationDetent) {
+    init(isBackViewInteractable: Bool = false, isInteractiveSizeSupported: Bool = false, dimmingState: DimmedView.AlphaState = .transparent, direction: PresentingDirection, sizeMode: PresentationDetent) {
         self.isBackViewInteractable = isBackViewInteractable
         self.isInteractiveSizeSupported = isInteractiveSizeSupported
         self.dimmingState = dimmingState
@@ -30,11 +30,13 @@ struct PresentationConfiguration {
 
 struct PresentationStyle {
     
-    var bottomSheet: PresentationConfiguration = PresentationConfiguration(isBackViewInteractable: true, isInteractiveSizeSupported: true, direction: .bottom, sizeMode: .interactive)
-    
-    var leftPageSheet: PresentationConfiguration = PresentationConfiguration(isBackViewInteractable: true, isInteractiveSizeSupported: true, direction: .left, sizeMode: .interactive)
+//    var bottomSheet: PresentationConfiguration = PresentationConfiguration(isBackViewInteractable: true, isInteractiveSizeSupported: true, direction: .bottom, sizeMode: .interactive)
+//
+//    var leftPageSheet: PresentationConfiguration = PresentationConfiguration(isBackViewInteractable: true, isInteractiveSizeSupported: true, direction: .left, sizeMode: .interactive)
 }
 
-struct PresentationAnimators {
-    
-}
+
+
+// client code should look somehow like this (options):
+//1.  having different delegates for each feature
+//2. having different animators, presentationController which are kept in struct
