@@ -11,22 +11,31 @@ import UIKit
 class ModalPresentationDelegate: NSObject, UIViewControllerTransitioningDelegate {
     
     
-    // custom presentation controller
-    // dismissal interactively, meaning that dismissing when swiped down
-    // custom animator
+     var presentationController: PresentationController
+    
+     var dismissalAnimator: ModalTransitionAnimator
+    
+    var presentationAnimator: ModalTransitionAnimator
+    
         
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
-        ModalTransitionAnimator(configuration: .init(style: .dismissal, direction: .bottom, transitionDuration: 0.05, hasHapticFeedback: true))
+        dismissalAnimator
     }
 
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
-        ModalTransitionAnimator(configuration: .init(style: .presentation, direction: .bottom, transitionDuration: 0.05, hasHapticFeedback: true))
+        presentationAnimator
     }
 
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
 
-        PresentationController(presentedViewController: presented, presenting: presenting, configuration: .init(direction: .bottom, sizeMode: .short))
+       presentationController
+    }
+    
+    init(presentationController: PresentationController, dismissalAnimator: ModalTransitionAnimator, presentationAnimator: ModalTransitionAnimator) {
+        self.presentationController = presentationController
+        self.dismissalAnimator = dismissalAnimator
+        self.presentationAnimator = presentationAnimator
     }
 }

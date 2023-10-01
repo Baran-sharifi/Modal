@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7034986C2AC93B4A004AA915 /* PresentatedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7034986B2AC93B4A004AA915 /* PresentatedViewController.swift */; };
 		705C2A232AC5BCDD002CCCC3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A222AC5BCDD002CCCC3 /* AppDelegate.swift */; };
 		705C2A272AC5BCDD002CCCC3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A262AC5BCDD002CCCC3 /* ViewController.swift */; };
 		705C2A2D2AC5BCDD002CCCC3 /* ModalViewTest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A2B2AC5BCDD002CCCC3 /* ModalViewTest.xcdatamodeld */; };
@@ -17,11 +18,12 @@
 		705C2A3F2AC5BDEA002CCCC3 /* Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A3E2AC5BDEA002CCCC3 /* Delegate.swift */; };
 		705C2A412AC5BDF5002CCCC3 /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A402AC5BDF5002CCCC3 /* PresentationController.swift */; };
 		705C2A432AC5BE02002CCCC3 /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A422AC5BE02002CCCC3 /* Views.swift */; };
-		705C2A452AC5BE88002CCCC3 /* Presentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A442AC5BE88002CCCC3 /* Presentable.swift */; };
+		705C2A452AC5BE88002CCCC3 /* PresentableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A442AC5BE88002CCCC3 /* PresentableViewController.swift */; };
 		705C2A472AC5BEA8002CCCC3 /* Configurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A462AC5BEA8002CCCC3 /* Configurations.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7034986B2AC93B4A004AA915 /* PresentatedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentatedViewController.swift; sourceTree = "<group>"; };
 		705C2A1F2AC5BCDD002CCCC3 /* ModalViewTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ModalViewTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		705C2A222AC5BCDD002CCCC3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		705C2A262AC5BCDD002CCCC3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -34,7 +36,7 @@
 		705C2A3E2AC5BDEA002CCCC3 /* Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Delegate.swift; sourceTree = "<group>"; };
 		705C2A402AC5BDF5002CCCC3 /* PresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
 		705C2A422AC5BE02002CCCC3 /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
-		705C2A442AC5BE88002CCCC3 /* Presentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presentable.swift; sourceTree = "<group>"; };
+		705C2A442AC5BE88002CCCC3 /* PresentableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentableViewController.swift; sourceTree = "<group>"; };
 		705C2A462AC5BEA8002CCCC3 /* Configurations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configurations.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,6 +72,7 @@
 			children = (
 				705C2A392AC5BDBC002CCCC3 /* ModalStuff */,
 				705C2A222AC5BCDD002CCCC3 /* AppDelegate.swift */,
+				7034986B2AC93B4A004AA915 /* PresentatedViewController.swift */,
 				705C2A262AC5BCDD002CCCC3 /* ViewController.swift */,
 				705C2A2E2AC5BCDE002CCCC3 /* Assets.xcassets */,
 				705C2A302AC5BCDE002CCCC3 /* LaunchScreen.storyboard */,
@@ -87,7 +90,7 @@
 				705C2A3E2AC5BDEA002CCCC3 /* Delegate.swift */,
 				705C2A402AC5BDF5002CCCC3 /* PresentationController.swift */,
 				705C2A422AC5BE02002CCCC3 /* Views.swift */,
-				705C2A442AC5BE88002CCCC3 /* Presentable.swift */,
+				705C2A442AC5BE88002CCCC3 /* PresentableViewController.swift */,
 				705C2A462AC5BEA8002CCCC3 /* Configurations.swift */,
 			);
 			path = ModalStuff;
@@ -172,7 +175,8 @@
 				705C2A472AC5BEA8002CCCC3 /* Configurations.swift in Sources */,
 				705C2A3B2AC5BDD2002CCCC3 /* Enums.swift in Sources */,
 				705C2A2D2AC5BCDD002CCCC3 /* ModalViewTest.xcdatamodeld in Sources */,
-				705C2A452AC5BE88002CCCC3 /* Presentable.swift in Sources */,
+				705C2A452AC5BE88002CCCC3 /* PresentableViewController.swift in Sources */,
+				7034986C2AC93B4A004AA915 /* PresentatedViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

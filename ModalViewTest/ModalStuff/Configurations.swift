@@ -34,3 +34,7 @@ struct PresentationStyle {
     
     var leftPageSheet: PresentationConfiguration = PresentationConfiguration(isBackViewInteractable: true, isInteractiveSizeSupported: true, direction: .left, sizeMode: .interactive)
 }
+
+struct PresentationAnimators {
+    
+}
