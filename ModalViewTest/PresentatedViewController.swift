@@ -12,7 +12,7 @@ class PresentedViewController: PresentableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
+        view.backgroundColor = .purple
         view.alpha = 0.7
         title = "Presented View Controller"
                 
@@ -54,9 +54,9 @@ class PresentedViewController: PresentableViewController {
         return view
     }()
     
-    private lazy var scrollView: UIScrollView = {
+    public lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
-        view.backgroundColor = .darkGray
+        view.backgroundColor = .white
         view.alpha = 0.5
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -67,6 +67,5 @@ class PresentedViewController: PresentableViewController {
     @objc func dismissSelf() {
         print(self.transitioningDelegate)
         dismiss(animated: true, completion: nil)
-    }
+    }    
 }
-

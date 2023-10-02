@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct PresentationConfiguration {
     
@@ -28,11 +29,20 @@ struct PresentationConfiguration {
 
 
 
-struct PresentationStyle {
+enum ModalStyle {
+   case bottomSheet
+}
+
+extension UIViewController {
     
-//    var bottomSheet: PresentationConfiguration = PresentationConfiguration(isBackViewInteractable: true, isInteractiveSizeSupported: true, direction: .bottom, sizeMode: .interactive)
-//
-//    var leftPageSheet: PresentationConfiguration = PresentationConfiguration(isBackViewInteractable: true, isInteractiveSizeSupported: true, direction: .left, sizeMode: .interactive)
+    func getPresented(in style: ModalStyle) {
+        if let self = self as? PresentableViewController {
+            self.modalPresentationStyle = .custom
+            self.modalTransitionDelegate = BottomSheetTransititionDelegate()
+        } else {
+            return
+        }
+    }
 }
 
 

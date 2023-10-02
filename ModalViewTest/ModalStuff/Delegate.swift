@@ -8,14 +8,8 @@
 import Foundation
 import UIKit
 
-class ModalPresentationDelegate: NSObject, UIViewControllerTransitioningDelegate {
-    
-    //     var presentationController: PresentationController
-    //    
-    //     var dismissalAnimator: ModalTransitionAnimator
-    //
-    //     var presentationAnimator: ModalTransitionAnimator
-    
+class BottomSheetTransititionDelegate: NSObject, UIViewControllerTransitioningDelegate {
+        
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return ModalTransitionAnimator(configuration: .init(style: .dismissal, direction: .bottom, transitionDuration: 2, hasHapticFeedback: true))
     }
@@ -25,6 +19,6 @@ class ModalPresentationDelegate: NSObject, UIViewControllerTransitioningDelegate
     }
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return PresentationController.init(presentedViewController: presented, presenting: presenting, configuration: .init(isInteractiveSizeSupported: true, direction: .bottom, sizeMode: .long))
+        return PresentationController.init(presentedViewController: presented, presenting: presenting, configuration: .init(isInteractiveSizeSupported: true, direction: .bottom, sizeMode: .short))
     }
 }

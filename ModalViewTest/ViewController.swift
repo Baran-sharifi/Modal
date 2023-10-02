@@ -9,7 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var modaltransitionDelegate = ModalPresentationDelegate()
+    var modaltransitionDelegate = BottomSheetTransititionDelegate()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,10 +29,8 @@ class ViewController: UIViewController {
     }
 
     @objc func presentModal() {
-        let presentedVC = PresentedViewController(isHeightInteractive: true)
+        let presentedVC = PresentedViewController(isHeightInteractive: true, modalTransitionDelegate: BottomSheetTransititionDelegate())
         presentedVC.view.backgroundColor = .white
-        presentedVC.modalPresentationStyle = .custom
-        presentedVC.transitioningDelegate = modaltransitionDelegate
         present(presentedVC, animated: true)
     }
 }

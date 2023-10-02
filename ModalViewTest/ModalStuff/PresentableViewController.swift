@@ -15,52 +15,44 @@ import UIKit
     var shortHeight: CGFloat { get }
     var longHeight: CGFloat { get }
     
+    var modalTransitionDelegate: UIViewControllerTransitioningDelegate { get set }
+    
     @objc optional var fractionalHeightToScreen: CGFloat { get set }
 }
 
-open class PresentableViewController: UIViewController, PresentableViewControllerProtocol {
+open class PresentableViewController: UIViewController, PresentableViewControllerProtocol, UIGestureRecognizerDelegate {
+  
+    var modalTransitionDelegate: UIViewControllerTransitioningDelegate
     
     var isHeightInteractive: Bool = true
     
     var shortHeight: CGFloat {
-        return isHeightInteractive ?  100 : longHeight
+        return isHeightInteractive ?  300 : longHeight
     }
     
     var longHeight: CGFloat {
-            return 400
+            return 500
     }
-    
+    // its the maximum content height considering the insets,
     var compactHeight: CGFloat?
-    
+     
     var scrollViewMaxHeight: CGFloat?
         
-    init(isHeightInteractive: Bool) {
+    init(isHeightInteractive: Bool, modalTransitionDelegate: UIViewControllerTransitioningDelegate) {
         self.isHeightInteractive = isHeightInteractive
-        
+        self.modalTransitionDelegate = modalTransitionDelegate
         super.init(nibName: nil, bundle: nil)
+       
+        self.modalPresentationStyle = .custom
+        self.transitioningDelegate = modalTransitionDelegate
     }
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+        
     open override func viewDidLayoutSubviews() {
         
-//        let screenUsableHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
-//        scrollViewMaxHeight = min(screenUsableHeight, scrollView.contentSize.height)
     }
 }
 
-struct Modal {
-    
-    func bottomsheet(presented: PresentableViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerTransitioningDelegate {
-        
-        let presentationController = PresentationController(presentedViewController: presented, presenting: presenting, configuration: .init(direction: .bottom, sizeMode: .short))
-        
-        let dismissalAnimator = ModalTransitionAnimator.init(configuration: .init(style: .dismissal, direction: .left, transitionDuration: 3, hasHapticFeedback: true))
-        
-        let presentationAnimator = ModalTransitionAnimator.init(configuration: .init(style: .presentation, direction: .left, transitionDuration: 3, hasHapticFeedback: true))
-        
-        return ModalPresentationDelegate()
-    }
-}

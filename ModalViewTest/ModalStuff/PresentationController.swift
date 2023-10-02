@@ -11,15 +11,16 @@ import UIKit
 //TODO: fix dimmed view animation with delay
 // check changing height
 
+//This class is meant to be declared with different configurations,
 
-open class PresentationController: UIPresentationController, UIGestureRecognizerDelegate {
+public class PresentationController: UIPresentationController {
     
     private var configuration: PresentationConfiguration
     
     private lazy var dimmingView: DimmedView = DimmedView(state: .percent(0.1))
     
-    private var presentable: PresentableViewController? {
-        return presentedViewController as? PresentableViewController
+    private var presentable: PresentedViewController? {
+        return presentedViewController as? PresentedViewController
     }
     
     open override var frameOfPresentedViewInContainerView: CGRect {
@@ -28,8 +29,7 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
         return presentedViewFrame(basedOn: configuration.direction, size: size)
     }
     
-    
-    func presentedViewSize(basedOn detent: PresentationDetent) -> CGSize {
+    private func presentedViewSize(basedOn detent: PresentationDetent) -> CGSize {
         
         let containerViewBounds = containerView?.bounds ?? CGRect.zero
         
@@ -66,8 +66,8 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
         return CGRect(origin: origin, size: size)
     }
     
-    open override func presentationTransitionWillBegin() {
-                
+    public override func presentationTransitionWillBegin() {
+        
         setupDimmedView()
         gestureSetup()
         
@@ -84,13 +84,13 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
         }
     }
     
-    open override func presentationTransitionDidEnd(_ completed: Bool) {}
+    public override func presentationTransitionDidEnd(_ completed: Bool) {}
     
-    open override func dismissalTransitionWillBegin() {
+    public override func dismissalTransitionWillBegin() {
         
         if let coordinator = presentedViewController.transitionCoordinator {
             coordinator.animate(alongsideTransition: { [weak self] context in
-                self?.dimmingView.state = .percent(0.5)
+                self?.dimmingView.state = .transparent
             })
         } else {
             dimmingView.state = .transparent
@@ -110,8 +110,6 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
         
         configuration.sizeMode = size
         // TODO: work on gesture
-        
-        guard let presentable = presentable else { return }
         
         UIView.animate(withDuration: 1, animations: { [weak self] in
             var newSize: CGSize
@@ -136,7 +134,7 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
         }
     }
     
-    func setupDimmedView() {
+    private func setupDimmedView() {
         
         guard let containerView = containerView else { return }
         
@@ -163,28 +161,46 @@ open class PresentationController: UIPresentationController, UIGestureRecognizer
         
         if configuration.isInteractiveSizeSupported {
             
-            let panTranslation = recognizer.translation(in: presentedView)
             let heightDiff = (presentable?.compactHeight ?? 300) - (presentable?.shortHeight ?? 100)
+            let panTranslation = recognizer.translation(in: presentedView)
             
             switch recognizer.state {
             case .began, .changed:
-                
-                if panTranslation.y < -(presentable?.shortHeight ?? 300)    {
+                if panTranslation.y < -(presentable?.shortHeight ?? 100) {
                     transitionToSize(.long)
                 } else if panTranslation.y >= heightDiff {
                     transitionToSize(.short)
                 }
-                
             default:
                 break
             }
+            
         }
     }
     
     // to avoid infrence of other gestures with pan ..
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+}
+
+extension PresentationController: UIGestureRecognizerDelegate {
+    
+    //TODO: work on gesture stuff again.
+    
+//    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//        if configuration.sizeMode == .long {
+//            return false
+//        } else {
+//            // allows the pan gesture to get involved.
+//            return true
+//        }
+        
+        // gestures are receiveid
+//    }
+//    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
        
-        //TODO: work on it
-        return true
-    }
+//        if gestureRecognizer is UIPanGestureRecognizer && configuration.sizeMode == .long {
+//            return false
+//        }else {
+//            return true
+//        }
+//    }
 }
