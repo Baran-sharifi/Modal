@@ -25,6 +25,6 @@ class ModalPresentationDelegate: NSObject, UIViewControllerTransitioningDelegate
     }
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return PresentationController.init(presentedViewController: presented, presenting: presenting, configuration: .init(isInteractiveSizeSupported: true, direction: .bottom, sizeMode: .short))
+        return PresentationController.init(presentedViewController: presented, presenting: presenting, configuration: .init(isInteractiveSizeSupported: true, direction: .bottom, sizeMode: .long))
     }
 }

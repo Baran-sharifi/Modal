@@ -29,8 +29,10 @@ class ViewController: UIViewController {
     }
 
     @objc func presentModal() {
-        var presentedVC = PresentedViewController(isHeightInteractive: true)
-        presentedVC.modalPresentationStyle = .popover
+        let presentedVC = PresentedViewController(isHeightInteractive: true)
+        presentedVC.view.backgroundColor = .white
+        presentedVC.modalPresentationStyle = .custom
+        presentedVC.transitioningDelegate = modaltransitionDelegate
         present(presentedVC, animated: true)
     }
 }

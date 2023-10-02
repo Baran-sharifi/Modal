@@ -10,33 +10,59 @@ import UIKit
 
 class PresentedViewController: PresentableViewController {
     
-    override var preferredContentSize: CGSize {
-        get {
-            // Set your custom size here
-            return CGSize(width: 50, height: 100)
-        }
-        set {
-            super.preferredContentSize = newValue
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .blue
         view.alpha = 0.7
         title = "Presented View Controller"
-        
-        let dismissButton = UIButton(type: .system)
-        dismissButton.setTitle("Dismiss", for: .normal)
-        dismissButton.addTarget(self, action: #selector(dismissSelf), for: .touchUpInside)
-        dismissButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(dismissButton)
-        
+                
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollView)
         NSLayoutConstraint.activate([
-            dismissButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            dismissButton.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+
+        scrollView.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 16),
+            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -16),
+            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -32),
+        ])
+        
+        for _ in 0...11 {
+            let view = UIView()
+            view.backgroundColor = .blue
+            view.translatesAutoresizingMaskIntoConstraints = false
+            stackView.addArrangedSubview(view)
+            view.widthAnchor.constraint(equalToConstant: 300).isActive = true
+            view.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        }
     }
+         
+    private lazy var stackView: UIStackView = {
+        let view = UIStackView()
+        view.backgroundColor = .white
+        view.spacing = 2
+        view.distribution = .equalSpacing
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.axis = .vertical
+        return view
+    }()
+    
+    private lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.backgroundColor = .darkGray
+        view.alpha = 0.5
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    
     
     @objc func dismissSelf() {
         print(self.transitioningDelegate)

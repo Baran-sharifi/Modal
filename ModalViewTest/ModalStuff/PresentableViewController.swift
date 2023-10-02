@@ -23,20 +23,17 @@ open class PresentableViewController: UIViewController, PresentableViewControlle
     var isHeightInteractive: Bool = true
     
     var shortHeight: CGFloat {
-        return isHeightInteractive ?  400.0 : longHeight
+        return isHeightInteractive ?  100 : longHeight
     }
     
     var longHeight: CGFloat {
-        
-        return scrollViewMaxHeight ?? view.safeAreaLayoutGuide.layoutFrame.height
+            return 400
     }
     
     var compactHeight: CGFloat?
     
     var scrollViewMaxHeight: CGFloat?
-    
-    var scrollView: UIScrollView = UIScrollView()
-    
+        
     init(isHeightInteractive: Bool) {
         self.isHeightInteractive = isHeightInteractive
         
@@ -49,8 +46,8 @@ open class PresentableViewController: UIViewController, PresentableViewControlle
     
     open override func viewDidLayoutSubviews() {
         
-        let screenUsableHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
-        scrollViewMaxHeight = min(screenUsableHeight, scrollView.contentSize.height)
+//        let screenUsableHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
+//        scrollViewMaxHeight = min(screenUsableHeight, scrollView.contentSize.height)
     }
 }
 

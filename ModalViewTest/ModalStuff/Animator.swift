@@ -104,6 +104,13 @@ open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
         })
     }
     
+    open func animateFrame(Yposition: CGFloat, dimmedViewAlpha: CGFloat) {
+        
+    }
+    
+    
+    
+    
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         configuration.transitionDuration
     }
