@@ -15,7 +15,9 @@ class PresentedViewController: PresentableViewController {
         view.backgroundColor = .purple
         view.alpha = 0.7
         title = "Presented View Controller"
-                
+        
+        self.navigationController?.isNavigationBarHidden = false
+        
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
         NSLayoutConstraint.activate([
@@ -34,7 +36,7 @@ class PresentedViewController: PresentableViewController {
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -32),
         ])
         
-        for _ in 0...11 {
+        for _ in 0...10 {
             let view = UIView()
             view.backgroundColor = .blue
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -58,11 +60,18 @@ class PresentedViewController: PresentableViewController {
         let view = UIScrollView()
         view.backgroundColor = .white
         view.alpha = 0.5
+        view.alwaysBounceVertical = false
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
     
+    override var scView: UIScrollView? {
+        get {
+          return scrollView
+        }
+        set {
+        }
+    }
     
     @objc func dismissSelf() {
         print(self.transitioningDelegate)

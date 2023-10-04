@@ -20,6 +20,8 @@
 		705C2A432AC5BE02002CCCC3 /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A422AC5BE02002CCCC3 /* Views.swift */; };
 		705C2A452AC5BE88002CCCC3 /* PresentableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A442AC5BE88002CCCC3 /* PresentableViewController.swift */; };
 		705C2A472AC5BEA8002CCCC3 /* Configurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A462AC5BEA8002CCCC3 /* Configurations.swift */; };
+		7066BCCA2ACD4CAF00C17ADF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7066BCC92ACD4CAF00C17ADF /* Extensions.swift */; };
+		7066BCCC2ACD57B900C17ADF /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7066BCCB2ACD57B900C17ADF /* NavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		705C2A422AC5BE02002CCCC3 /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
 		705C2A442AC5BE88002CCCC3 /* PresentableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentableViewController.swift; sourceTree = "<group>"; };
 		705C2A462AC5BEA8002CCCC3 /* Configurations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configurations.swift; sourceTree = "<group>"; };
+		7066BCC92ACD4CAF00C17ADF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		7066BCCB2ACD57B900C17ADF /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +96,8 @@
 				705C2A422AC5BE02002CCCC3 /* Views.swift */,
 				705C2A442AC5BE88002CCCC3 /* PresentableViewController.swift */,
 				705C2A462AC5BEA8002CCCC3 /* Configurations.swift */,
+				7066BCC92ACD4CAF00C17ADF /* Extensions.swift */,
+				7066BCCB2ACD57B900C17ADF /* NavigationController.swift */,
 			);
 			path = ModalStuff;
 			sourceTree = "<group>";
@@ -173,10 +179,12 @@
 				705C2A432AC5BE02002CCCC3 /* Views.swift in Sources */,
 				705C2A232AC5BCDD002CCCC3 /* AppDelegate.swift in Sources */,
 				705C2A472AC5BEA8002CCCC3 /* Configurations.swift in Sources */,
+				7066BCCA2ACD4CAF00C17ADF /* Extensions.swift in Sources */,
 				705C2A3B2AC5BDD2002CCCC3 /* Enums.swift in Sources */,
 				705C2A2D2AC5BCDD002CCCC3 /* ModalViewTest.xcdatamodeld in Sources */,
 				705C2A452AC5BE88002CCCC3 /* PresentableViewController.swift in Sources */,
 				7034986C2AC93B4A004AA915 /* PresentatedViewController.swift in Sources */,
+				7066BCCC2ACD57B900C17ADF /* NavigationController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,8 +19,15 @@ public class PresentationController: UIPresentationController {
     
     private lazy var dimmingView: DimmedView = DimmedView(state: .percent(0.1))
     
-    private var presentable: PresentedViewController? {
-        return presentedViewController as? PresentedViewController
+    // make lazy
+    
+    private var presentable: PresentableViewController? {
+        
+        if let presentedVC = presentedViewController as? ModalNavigationController {
+            return presentedVC.currentPresentableViewController as? PresentableViewController
+        } else {
+            return presentedViewController as? PresentedViewController
+        }
     }
     
     open override var frameOfPresentedViewInContainerView: CGRect {
@@ -111,6 +118,7 @@ public class PresentationController: UIPresentationController {
         configuration.sizeMode = size
         // TODO: work on gesture
         
+        
         UIView.animate(withDuration: 1, animations: { [weak self] in
             var newSize: CGSize
             
@@ -155,52 +163,90 @@ public class PresentationController: UIPresentationController {
         panGestureRecognizer.delegate = self
         presentable?.view.isUserInteractionEnabled = true
         presentable?.view.addGestureRecognizer(panGestureRecognizer)
+        let navbarPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(transitNavBar(_:)))
+        presentable?.navigationController?.navigationBar.addGestureRecognizer(navbarPanGestureRecognizer)
+        presentable?.navigationController?.navigationBar.isUserInteractionEnabled = true
     }
     
     @objc func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
+                
+        if let scrollView = self.presentable?.scView {
+            transit(basedOn: scrollView, recognizer: recognizer)
+        }
+    }
+    // navbar gesture
+    @objc func transitNavBar(_ recognizer: UIPanGestureRecognizer) {
         
         if configuration.isInteractiveSizeSupported {
             
-            let heightDiff = (presentable?.compactHeight ?? 300) - (presentable?.shortHeight ?? 100)
-            let panTranslation = recognizer.translation(in: presentedView)
+            if recognizer.view?.frame == self.presentable?.navigationController?.navigationBar.frame {
+                print("nav bar tapped")
+            }
             
-            switch recognizer.state {
-            case .began, .changed:
-                if panTranslation.y < -(presentable?.shortHeight ?? 100) {
-                    transitionToSize(.long)
-                } else if panTranslation.y >= heightDiff {
+            let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
+            let shortDestinationCondition = configuration.sizeMode == .long && translation >= 0
+            let longDestinationCondition = configuration.sizeMode == .short && translation < 0
+            
+            if shortDestinationCondition {
+                transitionToSize(.short)
+            } else if longDestinationCondition {
+                transitionToSize(.long)
+            }
+        }
+    }
+    // scrollView gesture
+    func transit(basedOn scrollView: UIScrollView, recognizer: UIPanGestureRecognizer) {
+        
+        // still needs logic.
+        
+        if configuration.isInteractiveSizeSupported {
+            
+            let maxVerticalOffSet = scrollView.contentSize.height - scrollView.bounds.height
+            print("maxV \(maxVerticalOffSet)")
+            print("offset \(scrollView.contentOffset.y)")
+            print("y translation: \(recognizer.translation(in: presentable?.navigationItem.titleView).y)")
+                    
+            switch configuration.sizeMode {
+            case .long :
+                // if gesture is not from the scrollview, then
+                
+                if recognizer.translation(in: presentable?.navigationItem.titleView).y > 0 {
                     transitionToSize(.short)
+                }
+            case .short:
+                // upward scroll... if we are on end, biggest , offset is out if is bigger than max or equal get bigger
+                if recognizer.translation(in: scrollView).y < 0 {
+                    if scrollView.contentOffset.y >= maxVerticalOffSet {
+                        transitionToSize(.long)
+                    }
                 }
             default:
                 break
             }
-            
         }
     }
-    
-    // to avoid infrence of other gestures with pan ..
 }
 
+// to avoid infrence of other gestures with pan ...
+
 extension PresentationController: UIGestureRecognizerDelegate {
-    
-    //TODO: work on gesture stuff again.
-    
-//    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        if configuration.sizeMode == .long {
-//            return false
-//        } else {
-//            // allows the pan gesture to get involved.
-//            return true
-//        }
         
-        // gestures are receiveid
-//    }
-//    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-       
-//        if gestureRecognizer is UIPanGestureRecognizer && configuration.sizeMode == .long {
-//            return false
-//        }else {
-//            return true
-//        }
-//    }
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer.view?.frame == self.presentable?.navigationController?.navigationBar.frame {
+           return false
+        } else {
+            return true
+        }
+        
+    }
+    
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+     
+        if touch.view?.frame == self.presentable?.navigationController?.navigationBar.frame {
+            print("yay")
+        }
+        return true
+    }
 }
+
+

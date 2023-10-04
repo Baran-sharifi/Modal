@@ -21,7 +21,7 @@ import UIKit
 }
 
 open class PresentableViewController: UIViewController, PresentableViewControllerProtocol, UIGestureRecognizerDelegate {
-  
+    
     var modalTransitionDelegate: UIViewControllerTransitioningDelegate
     
     var isHeightInteractive: Bool = true
@@ -31,18 +31,20 @@ open class PresentableViewController: UIViewController, PresentableViewControlle
     }
     
     var longHeight: CGFloat {
-            return 500
+        return 500
     }
     // its the maximum content height considering the insets,
     var compactHeight: CGFloat?
-     
+    
     var scrollViewMaxHeight: CGFloat?
-        
+    
+    var scView: UIScrollView?
+    
     init(isHeightInteractive: Bool, modalTransitionDelegate: UIViewControllerTransitioningDelegate) {
         self.isHeightInteractive = isHeightInteractive
         self.modalTransitionDelegate = modalTransitionDelegate
         super.init(nibName: nil, bundle: nil)
-       
+        
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = modalTransitionDelegate
     }
@@ -50,9 +52,8 @@ open class PresentableViewController: UIViewController, PresentableViewControlle
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        
+    
     open override func viewDidLayoutSubviews() {
         
     }
 }
-

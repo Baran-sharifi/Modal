@@ -31,6 +31,7 @@ class ViewController: UIViewController {
     @objc func presentModal() {
         let presentedVC = PresentedViewController(isHeightInteractive: true, modalTransitionDelegate: BottomSheetTransititionDelegate())
         presentedVC.view.backgroundColor = .white
-        present(presentedVC, animated: true)
+        let navc = ModalNavigationController(rootViewController: presentedVC)
+        present(navc, animated: true)
     }
 }
