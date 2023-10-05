@@ -129,12 +129,12 @@ open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
 
 public struct ModalAnimatorConfiguration {
     
-    public var style: ModalTransitionStyle
+    public var style: PresentationState
     public var direction: PresentingDirection
     public var transitionDuration: Double
     public var hasHapticFeedback: Bool
     
-    init(style: ModalTransitionStyle, direction: PresentingDirection, transitionDuration: Double, hasHapticFeedback: Bool) {
+    init(style: PresentationState, direction: PresentingDirection, transitionDuration: Double, hasHapticFeedback: Bool) {
         self.style = style
         self.direction = direction
         self.transitionDuration = transitionDuration

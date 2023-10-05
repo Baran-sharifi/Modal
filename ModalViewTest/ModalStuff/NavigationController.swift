@@ -13,8 +13,8 @@ class ModalNavigationController: UINavigationController {
     var currentPresentableViewController: UIViewController
     
     var modalTransitionDelegate: UIViewControllerTransitioningDelegate? {
-        if let pvc = currentPresentableViewController as? PresentableViewController {
-            return pvc.modalTransitionDelegate
+        if let presentedVC = currentPresentableViewController as? PresentableViewController {
+            return presentedVC.modalTransitionDelegate
         } else {
             return BottomSheetTransititionDelegate()
         }
@@ -27,17 +27,9 @@ class ModalNavigationController: UINavigationController {
         
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = modalTransitionDelegate
-        self.navigationBar.isUserInteractionEnabled = true
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func navBarTapped() {
-        
-    }
+    }    
 }
-
-// so navigationController gets present and

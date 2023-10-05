@@ -36,13 +36,17 @@ class PresentedViewController: PresentableViewController {
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -32),
         ])
         
-        for _ in 0...10 {
+        for i in 0...10 {
             let view = UIView()
             view.backgroundColor = .blue
             view.translatesAutoresizingMaskIntoConstraints = false
             stackView.addArrangedSubview(view)
-            view.widthAnchor.constraint(equalToConstant: 300).isActive = true
             view.heightAnchor.constraint(equalToConstant: 100).isActive = true
+            if i == 10 {
+                view.backgroundColor = .red
+            }else if i == 0 {
+                view.backgroundColor = .yellow
+            }
         }
     }
          

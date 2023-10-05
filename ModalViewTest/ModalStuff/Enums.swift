@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ModalTransitionStyle {
+public enum PresentationState {
     
     case presentation
     case dismissal
@@ -30,5 +30,6 @@ public enum PresentationDetent {
     case long
     case short
     case compact
+    case fullScreen
     case interactive
 }
