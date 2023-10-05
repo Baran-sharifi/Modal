@@ -15,6 +15,8 @@ import UIKit
 
 public class PresentationController: UIPresentationController {
     
+    private var transitionStateMachine: ModalStateMachine
+    
     private var configuration: PresentationConfiguration
     
     private lazy var dimmingView: DimmedView = DimmedView(state: .percent(0.1))
@@ -33,6 +35,14 @@ public class PresentationController: UIPresentationController {
         
         let size = presentedViewSize(basedOn: configuration.sizeMode)
         return presentedViewFrame(basedOn: configuration.direction, size: size)
+    }
+    
+    init(presentedViewController: UIViewController,
+         presenting presentingViewController: UIViewController?,
+         configuration: PresentationConfiguration, transitionStateMachine: ModalStateMachine) {
+        self.configuration = configuration
+        self.transitionStateMachine = transitionStateMachine
+        super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
     }
     
     private func presentedViewSize(basedOn detent: PresentationDetent) -> CGSize {
@@ -74,7 +84,7 @@ public class PresentationController: UIPresentationController {
     
     public override func presentationTransitionWillBegin() {
         
-        setupDimmedView()
+        dimmedViewSetup()
         gestureSetup()
         
         if configuration.isBackViewInteractable {
@@ -103,14 +113,7 @@ public class PresentationController: UIPresentationController {
         }
     }
     
-    open override func dismissalTransitionDidEnd(_ completed: Bool){}
-    
-    init(presentedViewController: UIViewController,
-         presenting presentingViewController: UIViewController?,
-         configuration: PresentationConfiguration) {
-        self.configuration = configuration
-        super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
-    }
+    open override func dismissalTransitionDidEnd(_ completed: Bool){ }
     
     func animateTransitionToSize(_ size: PresentationDetent) {
         
@@ -141,7 +144,7 @@ public class PresentationController: UIPresentationController {
         }
     }
     
-    private func setupDimmedView() {
+    private func dimmedViewSetup() {
         
         guard let containerView = containerView else { return }
         
@@ -179,6 +182,10 @@ public class PresentationController: UIPresentationController {
         
         if configuration.isInteractiveSizeSupported {
             
+            
+            transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.scrollViewPan(input:  recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y))
+            
+            
             let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
             let shortDestinationCondition = configuration.sizeMode == .long && translation >= 0
             let longDestinationCondition = configuration.sizeMode == .short && translation < 0
@@ -197,6 +204,11 @@ public class PresentationController: UIPresentationController {
         if configuration.isInteractiveSizeSupported {
             
             let maxVerticalOffSet = scrollView.contentSize.height - scrollView.bounds.height
+            transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.scrollViewPan(input: scrollView.contentOffset.y))
+        
+            
+            let transitionInput = (recognizer.translation(in: scrollView).y)
+
             switch configuration.sizeMode {
             case .long :
                 break
