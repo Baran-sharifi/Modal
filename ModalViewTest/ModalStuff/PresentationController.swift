@@ -15,14 +15,13 @@ import UIKit
 
 public class PresentationController: UIPresentationController {
     
-    private lazy var transitionStateMachine: ModalDetentStateMachine = ModalDetentStateMachine(initialState: IDK.mapState(Detent: configuration.sizeMode))
+    private lazy var transitionStateMachine: ModalDetentStateMachine = ModalDetentStateMachine(initialState: DetentFactory.state(Of: configuration.sizeMode))
     
     private lazy var animationDelegate: DetentAnimationTransition = DetentAnimationTransition(presentationController: self)
     
     internal var configuration: PresentationConfiguration
     
     private lazy var dimmingView: DimmedView = DimmedView(state: .percent(0.1))
-    
     
     
     // make lazy
@@ -63,8 +62,11 @@ public class PresentationController: UIPresentationController {
         case .compact:
             guard let scv = presentable.scView else { return .zero }
             let maxContentHeight = scv.contentSize.height - scv.bounds.height
-            size = CGSize.init(width: containerViewBounds.width, height: maxContentHeight)
+            size = CGSize.init(width: containerViewBounds.width, height: 450)
+            
         }
+        print("size is:")
+        print(size)
         return size
     }
     
@@ -190,10 +192,7 @@ public class PresentationController: UIPresentationController {
     @objc func handleNavBarGesture(_ recognizer: UIPanGestureRecognizer) {
 
         if configuration.isInteractiveSizeSupported {
-
-
-            
-            //            let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
+            //let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
             //            let shortDestinationCondition = configuration.sizeMode == .long && translation >= 0
             //            let longDestinationCondition = configuration.sizeMode == .short && translation < 0
             //

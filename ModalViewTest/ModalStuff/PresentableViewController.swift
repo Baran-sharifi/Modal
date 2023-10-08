@@ -31,7 +31,7 @@ open class PresentableViewController: UIViewController, PresentableViewControlle
     }
     
     var longHeight: CGFloat {
-        return 500
+        return 600
     }
     // its the maximum content height considering the insets,
     var compactHeight: CGFloat?

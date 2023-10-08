@@ -13,7 +13,7 @@ import UIKit
 
 //MARK: PC -> StateMachine, DetentAnimator,
 //MARK: DetentAnimator -> PC
-                   
+
 
 
 protocol EventProtocol {
@@ -32,17 +32,17 @@ protocol StateMachineAnimatorDelegate: AnyObject {
 }
 
 class ModalDetentStateMachine {
-        
+    
     var currentState: StateProtocol
     
     weak var animatorDelegate: StateMachineAnimatorDelegate?
-        
+    
     init(initialState: StateProtocol) {
         self.currentState = initialState
     }
     
     func handleNextState(basedOn event: EventProtocol) {
-
+        
         if let nextState = currentState.routeBasedOn(event: event) {
             guard let animator = animatorDelegate else { return }
             nextState.performTransition(with: animator)
@@ -68,8 +68,8 @@ class DetentAnimationTransition: StateMachineAnimatorDelegate {
                 newSize = presentationController.presentedViewSize(basedOn: .fullScreen)
             case .compact, .short:
                 if let scrollView = presentationController.presentable?.scView {
-                    let target = CGPoint(x: scrollView.contentOffset.x, y: -(presentationController.presentable?.navigationController?.navigationBar.frame.maxY ?? .zero))
-                    scrollView.setContentOffset(target, animated: true)
+//                    let target = CGPoint(x: scrollView.contentOffset.x, y: -(presentationController.presentable?.navigationController?.navigationBar.frame.maxY ?? .zero))
+//                    scrollView.setContentOffset(target, animated: true)
                 }
                 newSize = presentationController.presentedViewSize(basedOn: size)
             }
@@ -99,6 +99,7 @@ struct FullScreenState: StateProtocol {
         switch event {
         case .contentViewPan(translationY: let translation),
                 .navBarPan(translationY: let translation):
+            print("event is here right, translation  is: \(translation)")
             if translation >= 0.001 {
                 return DetentFactory.compactState
             }else {
@@ -125,7 +126,7 @@ struct ShortConstantState: StateProtocol {
         switch event {
         case .contentViewPan(translationY: let translation),
                 .navBarPan(translationY: let translation):
-            if translation >= 0.001 {
+            if translation <= -0.001 {
                 return DetentFactory.compactState
             }else {
                 return self
@@ -139,55 +140,53 @@ struct ShortConstantState: StateProtocol {
         }
     }
 }
+
+struct CompactState: StateProtocol {
     
-    struct CompactState: StateProtocol {
+    func performTransition(with animator: StateMachineAnimatorDelegate) {
+        print("im in compact animating compact")
+        animator.animateTransitionToSize(.compact)
+    }
+    
+    func routeBasedOn(event: EventProtocol) -> StateProtocol? {
         
-        func performTransition(with animator: StateMachineAnimatorDelegate) {
-            animator.animateTransitionToSize(.compact)
-        }
+        guard let event = event as? ModalTransitionEvents else {return self}
         
-        func routeBasedOn(event: EventProtocol) -> StateProtocol? {
-           
-            guard let event = event as? ModalTransitionEvents else {return self}
-                    
-                    //refactor with if case
-                    switch event {
-                    case .contentViewPan(translationY: let translation),
-                            .navBarPan(translationY: let translation):
-                        if translation >= 0.001 {
-                            return DetentFactory.fullScreenState
-                        }else {
-                            return DetentFactory.shortScreenState
-                        }
-                    case.scrollViewPan(contentOffset: let offset, maxVerticalOffset: let maxOffset, isScrollingUpward: let isScrollingUp):
-                        if isScrollingUp && offset >= maxOffset {
-                            return DetentFactory.fullScreenState
-                        }else {
-                            return DetentFactory.shortScreenState
-                        }
-                    }
+        //refactor with if case
+        switch event {
+        case .contentViewPan(translationY: let translation),
+                .navBarPan(translationY: let translation):
+            if translation >= 0.001 {
+                return DetentFactory.fullScreenState
+            }else {
+                return DetentFactory.shortScreenState
             }
+        case.scrollViewPan(contentOffset: let offset, maxVerticalOffset: let maxOffset, isScrollingUpward: let isScrollingUp):
+            if isScrollingUp && offset >= maxOffset {
+                return DetentFactory.fullScreenState
+            }else {
+                return DetentFactory.shortScreenState
+            }
+        }
     }
-    
-    
-    
-    enum ModalTransitionEvents: EventProtocol {
-        
-        case scrollViewPan(contentOffset: CGFloat, maxVerticalOffset: CGFloat, isScrollingUpward: Bool)
-        case navBarPan(translationY: CGFloat)
-        case contentViewPan(translationY: CGFloat)
-    }
-    
-    struct DetentFactory {
-        static var compactState = CompactState()
-        static var fullScreenState = FullScreenState()
-        static var shortScreenState = ShortConstantState()
 }
 
 
-struct IDK {
-    static func mapState(Detent: PresentationDetent) -> StateProtocol {
-        switch Detent {
+enum ModalTransitionEvents: EventProtocol {
+    
+    case scrollViewPan(contentOffset: CGFloat, maxVerticalOffset: CGFloat, isScrollingUpward: Bool)
+    case navBarPan(translationY: CGFloat)
+    case contentViewPan(translationY: CGFloat)
+}
+
+struct DetentFactory {
+    
+    static var compactState = CompactState()
+    static var fullScreenState = FullScreenState()
+    static var shortScreenState = ShortConstantState()
+    
+    static func state(Of detent: PresentationDetent) -> StateProtocol {
+        switch detent {
         case .compact:
             return DetentFactory.compactState
         case .fullScreen:
@@ -197,3 +196,4 @@ struct IDK {
         }
     }
 }
+
