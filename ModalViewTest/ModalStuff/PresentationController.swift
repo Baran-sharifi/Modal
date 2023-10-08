@@ -15,14 +15,18 @@ import UIKit
 
 public class PresentationController: UIPresentationController {
     
-    private var transitionStateMachine: ModalStateMachine
+    private lazy var transitionStateMachine: ModalDetentStateMachine = ModalDetentStateMachine(initialState: IDK.mapState(Detent: configuration.sizeMode))
     
-    private var configuration: PresentationConfiguration
+    private lazy var animationDelegate: DetentAnimationTransition = DetentAnimationTransition(presentationController: self)
+    
+    internal var configuration: PresentationConfiguration
     
     private lazy var dimmingView: DimmedView = DimmedView(state: .percent(0.1))
     
+    
+    
     // make lazy
-    private var presentable: PresentableViewController? {
+    internal var presentable: PresentableViewController? {
         
         if let presentedVC = presentedViewController as? ModalNavigationController {
             return presentedVC.currentPresentableViewController as? PresentableViewController
@@ -39,13 +43,12 @@ public class PresentationController: UIPresentationController {
     
     init(presentedViewController: UIViewController,
          presenting presentingViewController: UIViewController?,
-         configuration: PresentationConfiguration, transitionStateMachine: ModalStateMachine) {
+         configuration: PresentationConfiguration) {
         self.configuration = configuration
-        self.transitionStateMachine = transitionStateMachine
         super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
     }
     
-    private func presentedViewSize(basedOn detent: PresentationDetent) -> CGSize {
+    internal func presentedViewSize(basedOn detent: PresentationDetent) -> CGSize {
         
         let containerViewBounds = containerView?.bounds ?? CGRect.zero
         
@@ -53,18 +56,19 @@ public class PresentationController: UIPresentationController {
         guard let presentable = presentable else {return CGSize.init(width: 200, height: 200)}
         
         switch detent {
-        case .long:
+        case .fullScreen:
             size = CGSize.init(width: containerViewBounds.width, height: presentable.longHeight)
         case .short:
             size = CGSize.init(width: containerViewBounds.width, height: presentable.shortHeight)
-        default:
-            //TODO: work on how to have compact mode
-            break
+        case .compact:
+            guard let scv = presentable.scView else { return .zero }
+            let maxContentHeight = scv.contentSize.height - scv.bounds.height
+            size = CGSize.init(width: containerViewBounds.width, height: maxContentHeight)
         }
         return size
     }
     
-    private func presentedViewFrame(basedOn direction: PresentingDirection, size: CGSize) -> CGRect {
+    internal func presentedViewFrame(basedOn direction: PresentingDirection, size: CGSize) -> CGRect {
         
         var origin = CGPoint.zero
         let containerBounds = containerView?.bounds ?? CGRect.zero
@@ -117,30 +121,30 @@ public class PresentationController: UIPresentationController {
     
     func animateTransitionToSize(_ size: PresentationDetent) {
         
-        configuration.sizeMode = size
-        UIView.animate(withDuration: 0.45, animations: { [weak self] in
-            var newSize: CGSize
-            
-            guard let self = self else { return }
-            switch self.configuration.sizeMode {
-            case .long:
-                newSize = self.presentedViewSize(basedOn: .long)
-            case .short:
-                if let scrollView = self.presentable?.scView {
-                    let target = CGPoint(x: scrollView.contentOffset.x, y: -(presentable?.navigationController?.navigationBar.frame.maxY ?? .zero))
-                    scrollView.setContentOffset(target, animated: true)
-                }
-                newSize = self.presentedViewSize(basedOn: .short)
-            default:
-                newSize = .zero
-            }
-            self.presentedView?.frame = self.presentedViewFrame(basedOn: configuration.direction, size: newSize)
-        })
+//        configuration.sizeMode = size
+//        UIView.animate(withDuration: 0.45, animations: { [weak self] in
+//            var newSize: CGSize
+//
+//            guard let self = self else { return }
+//            switch self.configuration.sizeMode {
+//            case .long:
+//                newSize = self.presentedViewSize(basedOn: .long)
+//            case .short:
+//                if let scrollView = self.presentable?.scView {
+//                    let target = CGPoint(x: scrollView.contentOffset.x, y: -(presentable?.navigationController?.navigationBar.frame.maxY ?? .zero))
+//                    scrollView.setContentOffset(target, animated: true)
+//                }
+//                newSize = self.presentedViewSize(basedOn: .short)
+//            default:
+//                newSize = .zero
+//            }
+//            self.presentedView?.frame = self.presentedViewFrame(basedOn: configuration.direction, size: newSize)
+//        })
     }
     
     public func delaycreator() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.animateTransitionToSize(.long)
+//            self.animateTransitionToSize(.long)
         }
     }
     
@@ -172,56 +176,62 @@ public class PresentationController: UIPresentationController {
     
     @objc func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
         
+        transitionStateMachine.animatorDelegate = animationDelegate
+        
         if let scrollView = self.presentable?.scView {
-            transit(basedOn: scrollView, recognizer: recognizer)
+            let maxOffset = scrollView.contentSize.height - scrollView.bounds.height
+            let isScrollingUp = recognizer.translation(in: scrollView).y < 0
+            transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.scrollViewPan(contentOffset: scrollView.contentOffset.y, maxVerticalOffset: maxOffset, isScrollingUpward: isScrollingUp))
+
         }
     }
     
     // navbar gesture
     @objc func handleNavBarGesture(_ recognizer: UIPanGestureRecognizer) {
-        
+
         if configuration.isInteractiveSizeSupported {
+
+
             
-            
-            transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.scrollViewPan(input:  recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y))
-            
-            
+            //            let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
+            //            let shortDestinationCondition = configuration.sizeMode == .long && translation >= 0
+            //            let longDestinationCondition = configuration.sizeMode == .short && translation < 0
+            //
+            //            if shortDestinationCondition {
+            //                animateTransitionToSize(.short)
+            //            } else if longDestinationCondition {
+            //                animateTransitionToSize(.long)
+            //            }
+
             let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
-            let shortDestinationCondition = configuration.sizeMode == .long && translation >= 0
-            let longDestinationCondition = configuration.sizeMode == .short && translation < 0
-            
-            if shortDestinationCondition {
-                animateTransitionToSize(.short)
-            } else if longDestinationCondition {
-                animateTransitionToSize(.long)
-            }
+            transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.navBarPan(translationY: translation))
+
+
         }
     }
-    
+
     // scrollView gesture
     func transit(basedOn scrollView: UIScrollView, recognizer: UIPanGestureRecognizer) {
-        
-        if configuration.isInteractiveSizeSupported {
-            
-            let maxVerticalOffSet = scrollView.contentSize.height - scrollView.bounds.height
-            transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.scrollViewPan(input: scrollView.contentOffset.y))
-        
-            
-            let transitionInput = (recognizer.translation(in: scrollView).y)
-
-            switch configuration.sizeMode {
-            case .long :
-                break
-            case .short:
-                if recognizer.translation(in: scrollView).y < 0 {
-                    if scrollView.contentOffset.y >= maxVerticalOffSet {
-                        animateTransitionToSize(.long)
-                    }
-                }
-            default:
-                break
-            }
-        }
+//
+//        if configuration.isInteractiveSizeSupported {
+//
+//            let maxVerticalOffSet = scrollView.contentSize.height - scrollView.bounds.height
+//
+//            let transitionInput = (recognizer.translation(in: scrollView).y)
+//
+//            switch configuration.sizeMode {
+//            case .long :
+//                break
+//            case .short:
+//                if recognizer.translation(in: scrollView).y < 0 {
+//                    if scrollView.contentOffset.y >= maxVerticalOffSet {
+//                        animateTransitionToSize(.long)
+//                    }
+//                }
+//            default:
+//                break
+//            }
+//        }
     }
 }
 
