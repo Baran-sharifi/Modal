@@ -17,12 +17,16 @@
 		705C2A3D2AC5BDE4002CCCC3 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A3C2AC5BDE4002CCCC3 /* Animator.swift */; };
 		705C2A3F2AC5BDEA002CCCC3 /* Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A3E2AC5BDEA002CCCC3 /* Delegate.swift */; };
 		705C2A412AC5BDF5002CCCC3 /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A402AC5BDF5002CCCC3 /* PresentationController.swift */; };
-		705C2A432AC5BE02002CCCC3 /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A422AC5BE02002CCCC3 /* Views.swift */; };
+		705C2A432AC5BE02002CCCC3 /* DimmedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A422AC5BE02002CCCC3 /* DimmedView.swift */; };
 		705C2A452AC5BE88002CCCC3 /* PresentableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A442AC5BE88002CCCC3 /* PresentableViewController.swift */; };
-		705C2A472AC5BEA8002CCCC3 /* Configurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A462AC5BEA8002CCCC3 /* Configurations.swift */; };
-		7062AE192ACEB06E00F0884B /* ModalPresentationStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7062AE182ACEB06E00F0884B /* ModalPresentationStateMachine.swift */; };
-		7066BCCA2ACD4CAF00C17ADF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7066BCC92ACD4CAF00C17ADF /* Extensions.swift */; };
+		705C2A472AC5BEA8002CCCC3 /* PresentationControllerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C2A462AC5BEA8002CCCC3 /* PresentationControllerConfiguration.swift */; };
 		7066BCCC2ACD57B900C17ADF /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7066BCCB2ACD57B900C17ADF /* NavigationController.swift */; };
+		709B515D2AD44B2000C8B522 /* ModalTransitionsEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709B515C2AD44B2000C8B522 /* ModalTransitionsEvents.swift */; };
+		709B515F2AD44C5A00C8B522 /* ModalDetentStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709B515E2AD44C5A00C8B522 /* ModalDetentStateMachine.swift */; };
+		709B51612AD44C7F00C8B522 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709B51602AD44C7F00C8B522 /* Protocols.swift */; };
+		709B51632AD44CC100C8B522 /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709B51622AD44CC100C8B522 /* States.swift */; };
+		709B51652AD44CD800C8B522 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709B51642AD44CD800C8B522 /* Constants.swift */; };
+		709B51672AD44D7100C8B522 /* DetentTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709B51662AD44D7100C8B522 /* DetentTransitionAnimation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,12 +42,16 @@
 		705C2A3C2AC5BDE4002CCCC3 /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		705C2A3E2AC5BDEA002CCCC3 /* Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Delegate.swift; sourceTree = "<group>"; };
 		705C2A402AC5BDF5002CCCC3 /* PresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
-		705C2A422AC5BE02002CCCC3 /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
+		705C2A422AC5BE02002CCCC3 /* DimmedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimmedView.swift; sourceTree = "<group>"; };
 		705C2A442AC5BE88002CCCC3 /* PresentableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentableViewController.swift; sourceTree = "<group>"; };
-		705C2A462AC5BEA8002CCCC3 /* Configurations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configurations.swift; sourceTree = "<group>"; };
-		7062AE182ACEB06E00F0884B /* ModalPresentationStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPresentationStateMachine.swift; sourceTree = "<group>"; };
-		7066BCC92ACD4CAF00C17ADF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		705C2A462AC5BEA8002CCCC3 /* PresentationControllerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationControllerConfiguration.swift; sourceTree = "<group>"; };
 		7066BCCB2ACD57B900C17ADF /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		709B515C2AD44B2000C8B522 /* ModalTransitionsEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalTransitionsEvents.swift; sourceTree = "<group>"; };
+		709B515E2AD44C5A00C8B522 /* ModalDetentStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalDetentStateMachine.swift; sourceTree = "<group>"; };
+		709B51602AD44C7F00C8B522 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		709B51622AD44CC100C8B522 /* States.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = States.swift; sourceTree = "<group>"; };
+		709B51642AD44CD800C8B522 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		709B51662AD44D7100C8B522 /* DetentTransitionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetentTransitionAnimation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,10 +84,9 @@
 		705C2A212AC5BCDD002CCCC3 /* ModalViewTest */ = {
 			isa = PBXGroup;
 			children = (
-				705C2A392AC5BDBC002CCCC3 /* ModalStuff */,
 				705C2A222AC5BCDD002CCCC3 /* AppDelegate.swift */,
-				7034986B2AC93B4A004AA915 /* PresentatedViewController.swift */,
-				705C2A262AC5BCDD002CCCC3 /* ViewController.swift */,
+				709B51682AD44F1A00C8B522 /* Sample */,
+				705C2A392AC5BDBC002CCCC3 /* Modal */,
 				705C2A2E2AC5BCDE002CCCC3 /* Assets.xcassets */,
 				705C2A302AC5BCDE002CCCC3 /* LaunchScreen.storyboard */,
 				705C2A332AC5BCDE002CCCC3 /* Info.plist */,
@@ -88,21 +95,50 @@
 			path = ModalViewTest;
 			sourceTree = "<group>";
 		};
-		705C2A392AC5BDBC002CCCC3 /* ModalStuff */ = {
+		705C2A392AC5BDBC002CCCC3 /* Modal */ = {
 			isa = PBXGroup;
 			children = (
+				709B51692AD44F4E00C8B522 /* UI */,
+				709B515B2AD44B0200C8B522 /* DetentsStateMachine */,
 				705C2A3A2AC5BDD2002CCCC3 /* Enums.swift */,
 				705C2A3C2AC5BDE4002CCCC3 /* Animator.swift */,
 				705C2A3E2AC5BDEA002CCCC3 /* Delegate.swift */,
 				705C2A402AC5BDF5002CCCC3 /* PresentationController.swift */,
-				705C2A422AC5BE02002CCCC3 /* Views.swift */,
-				705C2A442AC5BE88002CCCC3 /* PresentableViewController.swift */,
-				705C2A462AC5BEA8002CCCC3 /* Configurations.swift */,
-				7066BCC92ACD4CAF00C17ADF /* Extensions.swift */,
-				7066BCCB2ACD57B900C17ADF /* NavigationController.swift */,
-				7062AE182ACEB06E00F0884B /* ModalPresentationStateMachine.swift */,
 			);
-			path = ModalStuff;
+			path = Modal;
+			sourceTree = "<group>";
+		};
+		709B515B2AD44B0200C8B522 /* DetentsStateMachine */ = {
+			isa = PBXGroup;
+			children = (
+				709B515C2AD44B2000C8B522 /* ModalTransitionsEvents.swift */,
+				709B515E2AD44C5A00C8B522 /* ModalDetentStateMachine.swift */,
+				709B51662AD44D7100C8B522 /* DetentTransitionAnimation.swift */,
+				709B51602AD44C7F00C8B522 /* Protocols.swift */,
+				709B51622AD44CC100C8B522 /* States.swift */,
+				709B51642AD44CD800C8B522 /* Constants.swift */,
+			);
+			path = DetentsStateMachine;
+			sourceTree = "<group>";
+		};
+		709B51682AD44F1A00C8B522 /* Sample */ = {
+			isa = PBXGroup;
+			children = (
+				705C2A262AC5BCDD002CCCC3 /* ViewController.swift */,
+				7034986B2AC93B4A004AA915 /* PresentatedViewController.swift */,
+			);
+			path = Sample;
+			sourceTree = "<group>";
+		};
+		709B51692AD44F4E00C8B522 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				705C2A462AC5BEA8002CCCC3 /* PresentationControllerConfiguration.swift */,
+				7066BCCB2ACD57B900C17ADF /* NavigationController.swift */,
+				705C2A442AC5BE88002CCCC3 /* PresentableViewController.swift */,
+				705C2A422AC5BE02002CCCC3 /* DimmedView.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -176,19 +212,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				705C2A3F2AC5BDEA002CCCC3 /* Delegate.swift in Sources */,
+				709B51652AD44CD800C8B522 /* Constants.swift in Sources */,
 				705C2A3D2AC5BDE4002CCCC3 /* Animator.swift in Sources */,
 				705C2A412AC5BDF5002CCCC3 /* PresentationController.swift in Sources */,
 				705C2A272AC5BCDD002CCCC3 /* ViewController.swift in Sources */,
-				705C2A432AC5BE02002CCCC3 /* Views.swift in Sources */,
+				705C2A432AC5BE02002CCCC3 /* DimmedView.swift in Sources */,
 				705C2A232AC5BCDD002CCCC3 /* AppDelegate.swift in Sources */,
-				705C2A472AC5BEA8002CCCC3 /* Configurations.swift in Sources */,
-				7066BCCA2ACD4CAF00C17ADF /* Extensions.swift in Sources */,
+				705C2A472AC5BEA8002CCCC3 /* PresentationControllerConfiguration.swift in Sources */,
+				709B515D2AD44B2000C8B522 /* ModalTransitionsEvents.swift in Sources */,
+				709B51672AD44D7100C8B522 /* DetentTransitionAnimation.swift in Sources */,
 				705C2A3B2AC5BDD2002CCCC3 /* Enums.swift in Sources */,
-				7062AE192ACEB06E00F0884B /* ModalPresentationStateMachine.swift in Sources */,
 				705C2A2D2AC5BCDD002CCCC3 /* ModalViewTest.xcdatamodeld in Sources */,
 				705C2A452AC5BE88002CCCC3 /* PresentableViewController.swift in Sources */,
 				7034986C2AC93B4A004AA915 /* PresentatedViewController.swift in Sources */,
 				7066BCCC2ACD57B900C17ADF /* NavigationController.swift in Sources */,
+				709B51632AD44CC100C8B522 /* States.swift in Sources */,
+				709B51612AD44C7F00C8B522 /* Protocols.swift in Sources */,
+				709B515F2AD44C5A00C8B522 /* ModalDetentStateMachine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct PresentationConfiguration {
+struct PresentationControllerConfiguration {
     
     var isBackViewInteractable: Bool
     var isInteractiveSizeSupported: Bool

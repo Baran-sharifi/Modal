@@ -19,7 +19,7 @@ public protocol ModalTransitionAnimatorProtocol: NSObject, UIViewControllerTrans
 open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning, ModalTransitionAnimatorProtocol {
     
     /**
-     each animator has two styles for two different transitionable states of a ViewController.
+     each animator has two styles for two different transitionable states of a ViewController. just in case animations would differ in dismissal and presentation.
      */
     
     public var configuration: ModalAnimatorConfiguration
@@ -107,9 +107,6 @@ open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
     open func animateFrame(Yposition: CGFloat, dimmedViewAlpha: CGFloat) {
         
     }
-    
-    
-    
     
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         configuration.transitionDuration

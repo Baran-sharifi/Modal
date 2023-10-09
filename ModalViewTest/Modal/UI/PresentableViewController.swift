@@ -13,7 +13,7 @@ import UIKit
     var isHeightInteractive: Bool { get set }
     
     var shortHeight: CGFloat { get }
-    var longHeight: CGFloat { get }
+    var fullScreenHeight: CGFloat { get }
     
     var modalTransitionDelegate: UIViewControllerTransitioningDelegate { get set }
     
@@ -27,14 +27,17 @@ open class PresentableViewController: UIViewController, PresentableViewControlle
     var isHeightInteractive: Bool = true
     
     var shortHeight: CGFloat {
-        return isHeightInteractive ?  300 : longHeight
+        return isHeightInteractive ? 300 : compactHeight
     }
     
-    var longHeight: CGFloat {
-        return 600
+    var fullScreenHeight: CGFloat {
+        print(self.view.layoutMarginsGuide.layoutFrame.height)
+        return self.view.layoutMarginsGuide.layoutFrame.height
     }
     // its the maximum content height considering the insets,
-    var compactHeight: CGFloat?
+    var compactHeight: CGFloat {
+        return min(fullScreenHeight, scView?.contentSize.height ?? 300)
+    }
     
     var scrollViewMaxHeight: CGFloat?
     

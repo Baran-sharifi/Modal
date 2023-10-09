@@ -10,6 +10,8 @@ import UIKit
 
 class PresentedViewController: PresentableViewController {
     
+    private lazy var screenHeight = UIScreen.main.bounds.height
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .purple
@@ -77,8 +79,19 @@ class PresentedViewController: PresentableViewController {
         }
     }
     
+    override var compactHeight: CGFloat {
+        return min(screenHeight * 0.5, scrollView.contentSize.height)
+    }
+    
+    override var fullScreenHeight: CGFloat {
+        return screenHeight
+    }
+    
+    override var shortHeight: CGFloat {
+        return 300
+    }
+    
     @objc func dismissSelf() {
-        print(self.transitioningDelegate)
         dismiss(animated: true, completion: nil)
     }    
 }

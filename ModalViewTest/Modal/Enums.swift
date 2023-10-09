@@ -25,11 +25,7 @@ public enum PresentingDirection {
 
 public enum PresentationDetent {
     
-    // Large and medium are two custom sizes, compact is the one based on content and interactive is both of medium and large toghether
-    
-//    case long
     case short
     case compact
     case fullScreen
-//    case interactive
 }

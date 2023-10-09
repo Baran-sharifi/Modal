@@ -11,28 +11,30 @@ import UIKit
 //TODO: fix dimmed view animation with delay
 // check changing height
 
-//This class is meant to be declared with different configurations,
 
 public class PresentationController: UIPresentationController {
     
-    private lazy var transitionStateMachine: ModalDetentStateMachine = ModalDetentStateMachine(initialState: DetentFactory.state(Of: configuration.sizeMode))
+    private lazy var transitionStateMachine: ModalDetentStateMachine = {
+        let machine = ModalDetentStateMachine(initialState: DetentFactory.state(Of: configuration.sizeMode))
+        machine.animatorDelegate = animationDelegate
+        return machine
+    }()
     
     private lazy var animationDelegate: DetentAnimationTransition = DetentAnimationTransition(presentationController: self)
     
-    internal var configuration: PresentationConfiguration
+    internal var configuration: PresentationControllerConfiguration
     
     private lazy var dimmingView: DimmedView = DimmedView(state: .percent(0.1))
     
     
-    // make lazy
-    internal var presentable: PresentableViewController? {
+    internal lazy var presentable: PresentableViewController? = {
         
         if let presentedVC = presentedViewController as? ModalNavigationController {
             return presentedVC.currentPresentableViewController as? PresentableViewController
         } else {
             return presentedViewController as? PresentedViewController
         }
-    }
+    }()
     
     open override var frameOfPresentedViewInContainerView: CGRect {
         
@@ -42,7 +44,7 @@ public class PresentationController: UIPresentationController {
     
     init(presentedViewController: UIViewController,
          presenting presentingViewController: UIViewController?,
-         configuration: PresentationConfiguration) {
+         configuration: PresentationControllerConfiguration) {
         self.configuration = configuration
         super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
     }
@@ -56,17 +58,12 @@ public class PresentationController: UIPresentationController {
         
         switch detent {
         case .fullScreen:
-            size = CGSize.init(width: containerViewBounds.width, height: presentable.longHeight)
+            size = CGSize.init(width: containerViewBounds.width, height: presentable.fullScreenHeight)
         case .short:
             size = CGSize.init(width: containerViewBounds.width, height: presentable.shortHeight)
         case .compact:
-            guard let scv = presentable.scView else { return .zero }
-            let maxContentHeight = scv.contentSize.height - scv.bounds.height
-            size = CGSize.init(width: containerViewBounds.width, height: 450)
-            
+            size = CGSize.init(width: containerViewBounds.width, height: presentable.compactHeight)
         }
-        print("size is:")
-        print(size)
         return size
     }
     
@@ -120,36 +117,7 @@ public class PresentationController: UIPresentationController {
     }
     
     open override func dismissalTransitionDidEnd(_ completed: Bool){ }
-    
-    func animateTransitionToSize(_ size: PresentationDetent) {
-        
-//        configuration.sizeMode = size
-//        UIView.animate(withDuration: 0.45, animations: { [weak self] in
-//            var newSize: CGSize
-//
-//            guard let self = self else { return }
-//            switch self.configuration.sizeMode {
-//            case .long:
-//                newSize = self.presentedViewSize(basedOn: .long)
-//            case .short:
-//                if let scrollView = self.presentable?.scView {
-//                    let target = CGPoint(x: scrollView.contentOffset.x, y: -(presentable?.navigationController?.navigationBar.frame.maxY ?? .zero))
-//                    scrollView.setContentOffset(target, animated: true)
-//                }
-//                newSize = self.presentedViewSize(basedOn: .short)
-//            default:
-//                newSize = .zero
-//            }
-//            self.presentedView?.frame = self.presentedViewFrame(basedOn: configuration.direction, size: newSize)
-//        })
-    }
-    
-    public func delaycreator() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//            self.animateTransitionToSize(.long)
-        }
-    }
-    
+            
     private func dimmedViewSetup() {
         
         guard let containerView = containerView else { return }
@@ -178,69 +146,31 @@ public class PresentationController: UIPresentationController {
     
     @objc func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
         
-        transitionStateMachine.animatorDelegate = animationDelegate
-        
-        if let scrollView = self.presentable?.scView {
-            let maxOffset = scrollView.contentSize.height - scrollView.bounds.height
-            let isScrollingUp = recognizer.translation(in: scrollView).y < 0
-            transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.scrollViewPan(contentOffset: scrollView.contentOffset.y, maxVerticalOffset: maxOffset, isScrollingUpward: isScrollingUp))
-
+        if recognizer.state == .ended && recognizer.state == .ended {
+            
+            if let scrollView = self.presentable?.scView {
+                let maxOffset = scrollView.contentSize.height - scrollView.bounds.height
+                transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.scrollViewPan(contentOffset: scrollView.contentOffset.y, maxVerticalOffset: maxOffset))
+            }
         }
     }
     
-    // navbar gesture
     @objc func handleNavBarGesture(_ recognizer: UIPanGestureRecognizer) {
-
-        if configuration.isInteractiveSizeSupported {
-            //let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
-            //            let shortDestinationCondition = configuration.sizeMode == .long && translation >= 0
-            //            let longDestinationCondition = configuration.sizeMode == .short && translation < 0
-            //
-            //            if shortDestinationCondition {
-            //                animateTransitionToSize(.short)
-            //            } else if longDestinationCondition {
-            //                animateTransitionToSize(.long)
-            //            }
-
-            let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
-            transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.navBarPan(translationY: translation))
-
-
+        
+        if configuration.isInteractiveSizeSupported && recognizer.state == .ended {
+            if recognizer.state == .ended {
+                let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
+                
+                transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.navBarPan(translationY: translation))
+            }
         }
-    }
-
-    // scrollView gesture
-    func transit(basedOn scrollView: UIScrollView, recognizer: UIPanGestureRecognizer) {
-//
-//        if configuration.isInteractiveSizeSupported {
-//
-//            let maxVerticalOffSet = scrollView.contentSize.height - scrollView.bounds.height
-//
-//            let transitionInput = (recognizer.translation(in: scrollView).y)
-//
-//            switch configuration.sizeMode {
-//            case .long :
-//                break
-//            case .short:
-//                if recognizer.translation(in: scrollView).y < 0 {
-//                    if scrollView.contentOffset.y >= maxVerticalOffSet {
-//                        animateTransitionToSize(.long)
-//                    }
-//                }
-//            default:
-//                break
-//            }
-//        }
     }
 }
 
-// to avoid infrence of other gestures with pan ...
 
 extension PresentationController: UIGestureRecognizerDelegate {
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        
-        // nav bar should not be recognized with scrollView
         if gestureRecognizer.view?.frame == self.presentable?.navigationController?.navigationBar.frame {
             return false
         } else {
