@@ -22,7 +22,7 @@ class ModalDetentStateMachine {
     }
     
     func handleNextState(basedOn event: EventProtocol) {
-        
+        print("handle state is called.")
         if animationCompleted {
             if let nextState = currentState.routeBasedOn(event: event) {
                 guard let animator = animatorDelegate else { return }

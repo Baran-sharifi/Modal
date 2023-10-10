@@ -31,7 +31,6 @@ open class PresentableViewController: UIViewController, PresentableViewControlle
     }
     
     var fullScreenHeight: CGFloat {
-        print(self.view.layoutMarginsGuide.layoutFrame.height)
         return self.view.layoutMarginsGuide.layoutFrame.height
     }
     // its the maximum content height considering the insets,

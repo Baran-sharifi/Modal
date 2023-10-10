@@ -18,12 +18,13 @@ class DetentAnimationTransition: StateMachineAnimatorDelegate {
         
         presentationController.configuration.sizeMode = size
         
-        UIView.animate(withDuration: 0.5, delay: 0, animations: { [weak self] in
+        UIView.animate(withDuration: 0.45, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
             var newSize: CGSize
             
             guard let self = self else { return }
             newSize = presentationController.presentedViewSize(basedOn: size)
             presentationController.presentedView?.frame = presentationController.presentedViewFrame(basedOn: presentationController.configuration.direction, size: newSize)
+            presentationController.presentedView?.layoutIfNeeded()
         }, completion: { finished in
             self.animationCompleted = finished
         })

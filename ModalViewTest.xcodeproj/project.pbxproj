@@ -103,6 +103,7 @@
 				705C2A3A2AC5BDD2002CCCC3 /* Enums.swift */,
 				705C2A3C2AC5BDE4002CCCC3 /* Animator.swift */,
 				705C2A3E2AC5BDEA002CCCC3 /* Delegate.swift */,
+				705C2A462AC5BEA8002CCCC3 /* PresentationControllerConfiguration.swift */,
 				705C2A402AC5BDF5002CCCC3 /* PresentationController.swift */,
 			);
 			path = Modal;
@@ -133,7 +134,6 @@
 		709B51692AD44F4E00C8B522 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				705C2A462AC5BEA8002CCCC3 /* PresentationControllerConfiguration.swift */,
 				7066BCCB2ACD57B900C17ADF /* NavigationController.swift */,
 				705C2A442AC5BE88002CCCC3 /* PresentableViewController.swift */,
 				705C2A422AC5BE02002CCCC3 /* DimmedView.swift */,

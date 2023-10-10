@@ -117,7 +117,7 @@ public class PresentationController: UIPresentationController {
     }
     
     open override func dismissalTransitionDidEnd(_ completed: Bool){ }
-            
+    
     private func dimmedViewSetup() {
         
         guard let containerView = containerView else { return }
@@ -135,19 +135,22 @@ public class PresentationController: UIPresentationController {
     }
     
     func gestureSetup() {
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
-        panGestureRecognizer.delegate = self
-        presentable?.view.isUserInteractionEnabled = true
-        presentable?.view.addGestureRecognizer(panGestureRecognizer)
-        let navbarPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleNavBarGesture(_:)))
-        presentable?.navigationController?.navigationBar.addGestureRecognizer(navbarPanGestureRecognizer)
-        presentable?.navigationController?.navigationBar.isUserInteractionEnabled = true
+        
+        if configuration.isInteractiveSizeSupported {
+            
+            let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+            panGestureRecognizer.delegate = self
+            presentable?.view.isUserInteractionEnabled = true
+            presentable?.view.addGestureRecognizer(panGestureRecognizer)
+            let navbarPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleNavBarGesture(_:)))
+            presentable?.navigationController?.navigationBar.addGestureRecognizer(navbarPanGestureRecognizer)
+            presentable?.navigationController?.navigationBar.isUserInteractionEnabled = true
+        }
     }
     
     @objc func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
         
-        if recognizer.state == .ended && recognizer.state == .ended {
-            
+        if configuration.isInteractiveSizeSupported && recognizer.state == .ended {
             if let scrollView = self.presentable?.scView {
                 let maxOffset = scrollView.contentSize.height - scrollView.bounds.height
                 transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.scrollViewPan(contentOffset: scrollView.contentOffset.y, maxVerticalOffset: maxOffset))
@@ -158,15 +161,12 @@ public class PresentationController: UIPresentationController {
     @objc func handleNavBarGesture(_ recognizer: UIPanGestureRecognizer) {
         
         if configuration.isInteractiveSizeSupported && recognizer.state == .ended {
-            if recognizer.state == .ended {
-                let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
-                
-                transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.navBarPan(translationY: translation))
-            }
+            let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
+            
+            transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.navBarPan(translationY: translation))
         }
     }
 }
-
 
 extension PresentationController: UIGestureRecognizerDelegate {
     
