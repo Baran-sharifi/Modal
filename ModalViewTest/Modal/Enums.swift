@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum PresentationState {
+public enum ModalPresentationAnimationState {
     
     case presentation
     case dismissal

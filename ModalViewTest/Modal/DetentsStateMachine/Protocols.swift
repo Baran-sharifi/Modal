@@ -10,10 +10,11 @@ import Foundation
 protocol StateProtocol {
     
     func performTransition(with animator: StateMachineAnimatorDelegate)
-    func routeBasedOn(event: EventProtocol) -> StateProtocol?
+    func routeBasedOn(event: ModalTransitionEvents) -> StateProtocol?
 }
 
 protocol StateMachineAnimatorDelegate: AnyObject {
     func animateTransitionToSize(_ size: PresentationDetent)
+    func animateInteractiveHeight(_ height: CGFloat)
     var animationCompleted: Bool {get set}
 }

@@ -15,12 +15,11 @@ struct FullScreenState: StateProtocol {
         animator.animateTransitionToSize(.fullScreen)
     }
     
-    func routeBasedOn(event: EventProtocol) -> StateProtocol? {
+    func routeBasedOn(event: ModalTransitionEvents) -> StateProtocol? {
         
-        guard let event = event as? ModalTransitionEvents else {return self}
         switch event {
         case .navBarPan(translationY: let translation):
-            return translation >= 0.001 ? DetentFactory.compactState : nil
+            return translation >= 0.001 ? DetentFactory.compactState : self
         default:
             return nil
         }
@@ -33,14 +32,15 @@ struct ShortConstantState: StateProtocol {
         animator.animateTransitionToSize(.short)
     }
     
-    func routeBasedOn(event: EventProtocol) -> StateProtocol? {
+    func routeBasedOn(event: ModalTransitionEvents) -> StateProtocol? {
         
-        guard let event = event as? ModalTransitionEvents else {return self}
         switch event {
         case .navBarPan(translationY: let translation):
-            return translation <= -0.001 ? DetentFactory.compactState : nil
+            return translation <= -0.001 ? DetentFactory.compactState : self
         case.scrollViewPan(contentOffset: let offset, maxVerticalOffset: let maxOffset):
-            return offset >= maxOffset ? DetentFactory.compactState : nil
+            return offset >= maxOffset ? DetentFactory.compactState : self
+        case .interactivePan(velocityY: _):
+            return nil
         }
     }
 }
@@ -51,14 +51,15 @@ struct CompactState: StateProtocol {
         animator.animateTransitionToSize(.compact)
     }
     
-    func routeBasedOn(event: EventProtocol) -> StateProtocol? {
+    func routeBasedOn(event: ModalTransitionEvents) -> StateProtocol? {
         
-        guard let event = event as? ModalTransitionEvents else {return self}
         switch event {
         case .navBarPan(translationY: let translation):
             return translation <= -0.001 ? DetentFactory.fullScreenState : DetentFactory.shortScreenState
         case.scrollViewPan(contentOffset: let offset, maxVerticalOffset: let maxOffset):
             return offset >= maxOffset ? DetentFactory.fullScreenState : nil
+        case .interactivePan(velocityY: _):
+            return nil
         }
     }
 }

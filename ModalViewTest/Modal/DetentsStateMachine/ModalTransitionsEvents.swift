@@ -18,4 +18,5 @@ enum ModalTransitionEvents: EventProtocol {
     
     case scrollViewPan(contentOffset: CGFloat, maxVerticalOffset: CGFloat)
     case navBarPan(translationY: CGFloat)
+    case interactivePan(velocityY: CGFloat)
 }

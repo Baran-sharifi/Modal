@@ -21,13 +21,17 @@ class ModalDetentStateMachine {
         self.currentState = initialState
     }
     
-    func handleNextState(basedOn event: EventProtocol) {
-        print("handle state is called.")
+    func handleNextState(basedOn event: ModalTransitionEvents) {
         if animationCompleted {
-            if let nextState = currentState.routeBasedOn(event: event) {
-                guard let animator = animatorDelegate else { return }
-                nextState.performTransition(with: animator)
-                currentState = nextState
+            
+            guard let animator = animatorDelegate else { return }
+            if case.interactivePan(velocityY: let velocity) = event {
+                animator.animateInteractiveHeight(velocity)
+            }else {
+                if let nextState = currentState.routeBasedOn(event: event) {
+                    nextState.performTransition(with: animator)
+                    currentState = nextState
+                }
             }
         }
     }

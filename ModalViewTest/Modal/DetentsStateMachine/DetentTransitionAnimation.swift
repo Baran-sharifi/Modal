@@ -18,7 +18,7 @@ class DetentAnimationTransition: StateMachineAnimatorDelegate {
         
         presentationController.configuration.sizeMode = size
         
-        UIView.animate(withDuration: 0.45, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+        UIView.animate(withDuration: 0.2, delay: 0.1, options: .curveEaseInOut, animations: { [weak self] in
             var newSize: CGSize
             
             guard let self = self else { return }
@@ -30,7 +30,24 @@ class DetentAnimationTransition: StateMachineAnimatorDelegate {
         })
     }
     
+    func animateInteractiveHeight(_ height: CGFloat) {
+        
+        let newSize = CGSize.init(width: presentationController.containerView?.bounds.width ?? 300, height: (presentationController.presentedView?.frame.height)! + height)
+        
+        UIView.animate(withDuration: 0.02, delay: 0, animations: { [weak self] in
+            
+            guard let self = self else { return }
+            presentationController.presentedView?.frame = presentationController.presentedViewFrame(basedOn: presentationController.configuration.direction, size: newSize)
+            presentationController.presentedView?.layoutIfNeeded()
+        }, completion: { finished in
+            self.animationCompleted = finished
+        })
+    }
+    
     init(presentationController: PresentationController) {
         self.presentationController = presentationController
     }
 }
+
+
+

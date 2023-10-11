@@ -29,8 +29,8 @@ public class PresentationController: UIPresentationController {
     
     internal lazy var presentable: PresentableViewController? = {
         
-        if let presentedVC = presentedViewController as? ModalNavigationController {
-            return presentedVC.currentPresentableViewController as? PresentableViewController
+        if let presentedVC = (presentedViewController as? UINavigationController) {
+            return presentedVC.viewControllers.first as? PresentableViewController
         } else {
             return presentedViewController as? PresentedViewController
         }
@@ -54,7 +54,7 @@ public class PresentationController: UIPresentationController {
         let containerViewBounds = containerView?.bounds ?? CGRect.zero
         
         var size: CGSize = .zero
-        guard let presentable = presentable else {return CGSize.init(width: 200, height: 200)}
+        guard let presentable = presentable else { return CGSize.init(width: 200, height: 200) }
         
         switch detent {
         case .fullScreen:
@@ -148,6 +148,12 @@ public class PresentationController: UIPresentationController {
         }
     }
     
+    func normalizedVelocity(recognizer: UIPanGestureRecognizer) -> CGFloat {
+        let yVelocity = recognizer.velocity(in: self.presentable?.navigationController?.navigationBar).y
+        let translation = recognizer.velocity(in: self.presentable?.navigationController?.navigationBar).y
+        return -(yVelocity / 50)
+    }
+    
     @objc func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
         
         if configuration.isInteractiveSizeSupported && recognizer.state == .ended {
@@ -160,11 +166,27 @@ public class PresentationController: UIPresentationController {
     
     @objc func handleNavBarGesture(_ recognizer: UIPanGestureRecognizer) {
         
-        if configuration.isInteractiveSizeSupported && recognizer.state == .ended {
-            let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
+        if configuration.isInteractiveSizeSupported {
             
-            transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.navBarPan(translationY: translation))
+            switch recognizer.state {
+            case .began, .changed:
+                let velocity = normalizedVelocity(recognizer: recognizer)
+                transitionStateMachine.handleNextState(basedOn: .interactivePan(velocityY: velocity))
+            case .ended, .cancelled, .failed:
+                let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
+                transitionStateMachine.handleNextState(basedOn: .navBarPan(translationY: translation))
+            default:
+                break
+            }
         }
+        
+        
+        
+//        if configuration.isInteractiveSizeSupported && recognizer.state == .ended {
+//            let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
+//
+//            transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.navBarPan(translationY: translation))
+//        }
     }
 }
 

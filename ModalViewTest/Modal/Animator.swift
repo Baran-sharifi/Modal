@@ -32,7 +32,7 @@ open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
         self.configuration = configuration
         super.init()
         
-        if case.presentation = configuration.style {
+        if case.presentation = configuration.animationState {
             feedbackGenerator = UISelectionFeedbackGenerator()
             feedbackGenerator?.prepare()
         }
@@ -115,7 +115,7 @@ open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         
         // do the animation based on transitionContext and style, and maybe direction...
-        switch configuration.style {
+        switch configuration.animationState {
         case .dismissal:
             animateDismissal(transitionContext: transitionContext)
         case .presentation:
@@ -126,13 +126,13 @@ open class ModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
 
 public struct ModalAnimatorConfiguration {
     
-    public var style: PresentationState
+    public var animationState: ModalPresentationAnimationState
     public var direction: PresentingDirection
     public var transitionDuration: Double
     public var hasHapticFeedback: Bool
     
-    init(style: PresentationState, direction: PresentingDirection, transitionDuration: Double, hasHapticFeedback: Bool) {
-        self.style = style
+    init(animationState: ModalPresentationAnimationState, direction: PresentingDirection, transitionDuration: Double, hasHapticFeedback: Bool) {
+        self.animationState = animationState
         self.direction = direction
         self.transitionDuration = transitionDuration
         self.hasHapticFeedback = hasHapticFeedback
