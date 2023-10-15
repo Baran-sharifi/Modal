@@ -16,7 +16,7 @@ class ModalNavigationController: UINavigationController {
         if let presentedVC = currentPresentableViewController as? PresentableViewController {
             return presentedVC.modalTransitionDelegate
         } else {
-            return BottomSheetTransititionDelegate()
+            return BottomSheetTransitionDelegate()
         }
     }
     

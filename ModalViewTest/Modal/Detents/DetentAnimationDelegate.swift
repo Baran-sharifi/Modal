@@ -8,11 +8,23 @@
 import Foundation
 import UIKit
 
-class DetentAnimationTransition: StateMachineAnimatorDelegate {
+protocol StateMachineAnimatorDelegate: AnyObject {
+    
+    var animationCompleted: Bool { get set }
+    
+    func animateTransitionToSize(_ size: PresentationDetent)
+    func animateInteractiveHeight(_ height: CGFloat)
+}
+
+class DetentAnimationDelegate: StateMachineAnimatorDelegate {
     
     var animationCompleted: Bool = true
     
     var presentationController: PresentationController
+    
+    init(presentationController: PresentationController) {
+        self.presentationController = presentationController
+    }
     
     func animateTransitionToSize(_ size: PresentationDetent) {
         
@@ -39,9 +51,5 @@ class DetentAnimationTransition: StateMachineAnimatorDelegate {
         }, completion: { finished in
             self.animationCompleted = finished
         })
-    }
-    
-    init(presentationController: PresentationController) {
-        self.presentationController = presentationController
     }
 }

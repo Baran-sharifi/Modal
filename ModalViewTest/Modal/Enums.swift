@@ -14,9 +14,7 @@ public enum ModalPresentationAnimationState {
 }
 
 public enum PresentingDirection {
-    
-    // do we ever need a dismissal in same direction of presentation?
-    
+        
     case left
     case right
     case top

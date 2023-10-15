@@ -10,7 +10,7 @@ import Foundation
 
 //MARK: - Events and Constants
 
-enum ModalTransitionEvents {
+enum ModalDetentAnimationEvents {
     
     case scrollViewPan(contentOffset: CGFloat, maxVerticalOffset: CGFloat)
     case navBarPan(translationY: CGFloat)

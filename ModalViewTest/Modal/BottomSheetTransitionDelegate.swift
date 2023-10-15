@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class BottomSheetTransititionDelegate: NSObject, UIViewControllerTransitioningDelegate {
+class BottomSheetTransitionDelegate: NSObject, UIViewControllerTransitioningDelegate {
         
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return ModalTransitionAnimator(configuration: .init(animationState: .dismissal, direction: .bottom, transitionDuration: 2, hasHapticFeedback: true))

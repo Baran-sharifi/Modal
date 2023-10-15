@@ -7,7 +7,11 @@
 
 import Foundation
 
-//MARK: - States ...
+protocol StateProtocol {
+    
+    func performTransition(with animator: StateMachineAnimatorDelegate)
+    func routeBasedOn(event: ModalDetentAnimationEvents) -> StateProtocol?
+}
 
 struct FullScreenState: StateProtocol {
     
@@ -15,7 +19,7 @@ struct FullScreenState: StateProtocol {
         animator.animateTransitionToSize(.fullScreen)
     }
     
-    func routeBasedOn(event: ModalTransitionEvents) -> StateProtocol? {
+    func routeBasedOn(event: ModalDetentAnimationEvents) -> StateProtocol? {
         
         switch event {
         case .navBarPan(translationY: let translation):
@@ -32,7 +36,7 @@ struct ShortConstantState: StateProtocol {
         animator.animateTransitionToSize(.short)
     }
     
-    func routeBasedOn(event: ModalTransitionEvents) -> StateProtocol? {
+    func routeBasedOn(event: ModalDetentAnimationEvents) -> StateProtocol? {
         
         switch event {
         case .navBarPan(translationY: let translation):
@@ -51,7 +55,7 @@ struct CompactState: StateProtocol {
         animator.animateTransitionToSize(.compact)
     }
     
-    func routeBasedOn(event: ModalTransitionEvents) -> StateProtocol? {
+    func routeBasedOn(event: ModalDetentAnimationEvents) -> StateProtocol? {
         
         switch event {
         case .navBarPan(translationY: let translation):

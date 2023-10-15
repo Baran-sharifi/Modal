@@ -21,7 +21,7 @@ class ModalDetentStateMachine {
         self.currentState = initialState
     }
     
-    func handleNextState(basedOn event: ModalTransitionEvents) {
+    func handleNextState(basedOn event: ModalDetentAnimationEvents) {
         if animationCompleted {
             
             guard let animator = animatorDelegate else { return }

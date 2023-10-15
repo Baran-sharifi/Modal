@@ -16,12 +16,11 @@ public class PresentationController: UIPresentationController {
         return machine
     }()
     
-    private lazy var animationDelegate: DetentAnimationTransition = DetentAnimationTransition(presentationController: self)
+    private lazy var animationDelegate: DetentAnimationDelegate = DetentAnimationDelegate(presentationController: self)
     
     internal var configuration: PresentationControllerConfiguration
     
     private lazy var dimmingView: DimmedView = DimmedView(state: .percent(0.1))
-    
     
     internal lazy var presentable: PresentableViewController? = {
         
@@ -154,7 +153,7 @@ public class PresentationController: UIPresentationController {
         if configuration.isInteractiveSizeSupported && recognizer.state == .ended {
             if let scrollView = self.presentable?.scView {
                 let maxOffset = scrollView.contentSize.height - scrollView.bounds.height
-                transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.scrollViewPan(contentOffset: scrollView.contentOffset.y, maxVerticalOffset: maxOffset))
+                transitionStateMachine.handleNextState(basedOn: ModalDetentAnimationEvents.scrollViewPan(contentOffset: scrollView.contentOffset.y, maxVerticalOffset: maxOffset))
             }
         }
     }
@@ -187,3 +186,23 @@ extension PresentationController: UIGestureRecognizerDelegate {
         }
     }
 }
+
+struct PresentationControllerConfiguration {
+    
+    var isBackViewInteractable: Bool
+    var isInteractiveSizeSupported: Bool
+
+    var dimmingState: DimmedView.AlphaState
+    
+    var direction: PresentingDirection
+    var sizeMode: PresentationDetent
+    
+    init(isBackViewInteractable: Bool = false, isInteractiveSizeSupported: Bool = false, dimmingState: DimmedView.AlphaState = .transparent, direction: PresentingDirection, sizeMode: PresentationDetent) {
+        self.isBackViewInteractable = isBackViewInteractable
+        self.isInteractiveSizeSupported = isInteractiveSizeSupported
+        self.dimmingState = dimmingState
+        self.direction = direction
+        self.sizeMode = sizeMode
+    }
+}
+

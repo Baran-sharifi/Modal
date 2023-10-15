@@ -7,6 +7,9 @@
 
 import UIKit
 
+import Foundation
+import UIKit
+
 class DimmedView: UIView {
     
     enum AlphaState {
@@ -17,45 +20,36 @@ class DimmedView: UIView {
     }
     
     public var state: AlphaState = .transparent {
-        didSet{
-            applyTransparency(state)
+        didSet {
+            switch state {
+            case .transparent:
+                alpha = 0
+            case .percent(let value):
+                alpha = value
+            case .maxShadow:
+                alpha = 1
+            }
         }
     }
     
-    public var dismissPresenting: ((_ recognizer: UIGestureRecognizer) -> Void)?
-
-
     private lazy var tapGesture: UIGestureRecognizer = {
         return UITapGestureRecognizer(target: self, action: #selector(tapHandler(_:)))
     }()
-
+    
     init(state: AlphaState) {
         
         super.init(frame: .zero)
-        backgroundColor = .gray
         self.state = state
-        applyTransparency(state)
-        addGestureRecognizer(tapGesture)
-    }
-    
-    func applyTransparency(_ state: AlphaState) {
-        switch state {
-        case .transparent:
-            alpha = 0
-        case .percent(let value):
-            alpha = value
-            print(alpha)
-        case .maxShadow:
-            alpha = 1
-        }
+        self.addGestureRecognizer(tapGesture)
     }
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError()
     }
     
+    public var dismissPresenting: ((_ recognizer: UIGestureRecognizer) -> Void)?
+    
     @objc private func tapHandler(_: UIGestureRecognizer) {
         dismissPresenting?(tapGesture)
     }
 }
-
