@@ -8,10 +8,6 @@
 import Foundation
 import UIKit
 
-//TODO: fix dimmed view animation with delay
-// check changing height
-
-
 public class PresentationController: UIPresentationController {
     
     private lazy var transitionStateMachine: ModalDetentStateMachine = {
@@ -32,7 +28,7 @@ public class PresentationController: UIPresentationController {
         if let presentedVC = (presentedViewController as? UINavigationController) {
             return presentedVC.viewControllers.first as? PresentableViewController
         } else {
-            return presentedViewController as? PresentedViewController
+            return presentedViewController as? PresentableViewController
         }
     }()
     
@@ -150,7 +146,6 @@ public class PresentationController: UIPresentationController {
     
     func normalizedVelocity(recognizer: UIPanGestureRecognizer) -> CGFloat {
         let yVelocity = recognizer.velocity(in: self.presentable?.navigationController?.navigationBar).y
-        let translation = recognizer.velocity(in: self.presentable?.navigationController?.navigationBar).y
         return -(yVelocity / 50)
     }
     
@@ -179,14 +174,6 @@ public class PresentationController: UIPresentationController {
                 break
             }
         }
-        
-        
-        
-//        if configuration.isInteractiveSizeSupported && recognizer.state == .ended {
-//            let translation = recognizer.translation(in: self.presentable?.navigationController?.navigationBar).y
-//
-//            transitionStateMachine.handleNextState(basedOn: ModalTransitionEvents.navBarPan(translationY: translation))
-//        }
     }
 }
 

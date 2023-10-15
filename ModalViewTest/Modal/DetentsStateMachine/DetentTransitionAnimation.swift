@@ -45,6 +45,3 @@ class DetentAnimationTransition: StateMachineAnimatorDelegate {
         self.presentationController = presentationController
     }
 }
-
-
-
