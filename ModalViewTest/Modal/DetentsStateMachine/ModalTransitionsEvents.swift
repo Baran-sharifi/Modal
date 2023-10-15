@@ -10,11 +10,7 @@ import Foundation
 
 //MARK: - Events and Constants
 
-protocol EventProtocol {
-    
-}
-
-enum ModalTransitionEvents: EventProtocol {
+enum ModalTransitionEvents {
     
     case scrollViewPan(contentOffset: CGFloat, maxVerticalOffset: CGFloat)
     case navBarPan(translationY: CGFloat)
